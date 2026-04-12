@@ -21,7 +21,7 @@ export const ProductImage = ({
 }: ProductImageProps) => (
   <div
     className={[
-      'relative overflow-hidden rounded-[1.25rem]',
+      'relative overflow-hidden rounded-[1.25rem] bg-[#fff7f4]',
       heightClassName,
       isLoading ? 'animate-pulse' : '',
     ].join(' ')}

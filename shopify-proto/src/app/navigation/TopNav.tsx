@@ -13,14 +13,14 @@ type TopNavProps = {
 }
 
 export const TopNav = ({ cartItemCount, onOpenCart }: TopNavProps) => (
-  <header className="sticky top-0 z-40 border-b border-stone-200 bg-white/90 backdrop-blur">
+  <header className="sticky top-0 z-40 border-b border-[#9ce2df] bg-[#00b3ad]/95 backdrop-blur">
     <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-rose-500">
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/75">
           Cupcake Central MVP
         </p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight text-stone-950">
-          React commerce components with sane state
+        <h1 className="mt-1 text-2xl font-semibold tracking-tight text-white">
+          Three bakery commerce flows built to improve Shopify skills.
         </h1>
       </div>
 
@@ -34,8 +34,8 @@ export const TopNav = ({ cartItemCount, onOpenCart }: TopNavProps) => (
                 [
                   'rounded-full px-4 py-2 text-sm font-semibold transition',
                   isActive
-                    ? 'bg-stone-950 text-white'
-                    : 'bg-stone-100 text-stone-700 hover:bg-stone-200',
+                    ? 'bg-white text-[#006f6a]'
+                    : 'bg-white/20 text-white hover:bg-white/30',
                 ].join(' ')
               }
             >
@@ -47,10 +47,10 @@ export const TopNav = ({ cartItemCount, onOpenCart }: TopNavProps) => (
         <button
           type="button"
           onClick={onOpenCart}
-          className="ml-auto inline-flex items-center justify-center gap-3 rounded-full border border-stone-200 bg-white px-4 py-2 text-sm font-semibold text-stone-900 transition hover:border-stone-300 hover:bg-stone-50"
+          className="ml-auto inline-flex items-center justify-center gap-3 rounded-full border border-white/50 bg-white px-4 py-2 text-sm font-semibold text-[#006f6a] transition hover:bg-[#fff7f4]"
         >
           <img src={reactLogo} alt="" className="h-5 w-5" />
-          <span className="inline-flex min-w-7 items-center justify-center rounded-full bg-rose-500 px-2 py-1 text-xs font-bold text-white">
+          <span className="inline-flex min-w-7 items-center justify-center rounded-full bg-[#ec4f9f] px-2 py-1 text-xs font-bold text-white">
             {cartItemCount}
           </span>
         </button>

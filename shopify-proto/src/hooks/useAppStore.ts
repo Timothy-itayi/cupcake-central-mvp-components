@@ -2,11 +2,18 @@ import { useMemo, useReducer } from 'react'
 
 import { birthdayCandle } from '../data/addOns'
 import { starterCartProducts } from '../data/products'
-import { BOX_SIZE, createBuildABoxLine } from '../features/build-a-box/buildABox.helpers'
+import {
+  BOX_SIZE_OPTIONS_BY_TYPE,
+  createBuildABoxLine,
+  getRemainingCount,
+  getSelectedCount,
+  isBuildABoxComplete,
+} from '../features/build-a-box/buildABox.helpers'
 import { createCartLine, getCartItemCount, getCartSubtotal } from '../features/cart-drawer/cart.helpers'
 import type { AppState } from '../types/app'
+import type { BuildABoxSelection, BuildABoxSize } from '../types/buildABox'
 import type { CartLine } from '../types/cart'
-import type { Product } from '../types/product'
+import type { CupcakeBoxType, Product } from '../types/product'
 
 type Action =
   | { type: 'OPEN_CART' }
@@ -16,16 +23,19 @@ type Action =
   | { type: 'REMOVE_CART_LINE'; payload: { lineId: string } }
   | { type: 'INCREMENT_CART_LINE'; payload: { lineId: string } }
   | { type: 'DECREMENT_CART_LINE'; payload: { lineId: string } }
-  | { type: 'ADD_CUPCAKE_TO_BOX'; payload: { productId: string } }
-  | { type: 'REMOVE_CUPCAKE_FROM_BOX'; payload: { index: number } }
+  | { type: 'SET_BUILD_A_BOX_TYPE'; payload: { boxType: CupcakeBoxType } }
+  | { type: 'SET_BUILD_A_BOX_SIZE'; payload: { boxSize: BuildABoxSize } }
+  | { type: 'INCREMENT_BUILD_A_BOX_ITEM'; payload: { productId: string } }
+  | { type: 'DECREMENT_BUILD_A_BOX_ITEM'; payload: { productId: string } }
   | { type: 'CLEAR_BOX' }
 
 const initialState: AppState = {
   isCartOpen: false,
   cartLines: starterCartProducts.slice(0, 2).map((product) => createCartLine(product)),
   buildABox: {
-    selectedProductIds: [],
-    boxSize: BOX_SIZE,
+    boxType: 'regular',
+    boxSize: 12,
+    selections: [],
   },
 }
 
@@ -46,11 +56,27 @@ const upsertCartProduct = (lines: CartLine[], nextLine: CartLine) => {
   )
 }
 
+const upsertBuildABoxSelection = (
+  selections: BuildABoxSelection[],
+  productId: string,
+) => {
+  const match = selections.find((selection) => selection.productId === productId)
+
+  if (!match) {
+    return [...selections, { productId, quantity: 1 }]
+  }
+
+  return selections.map((selection) =>
+    selection.productId === productId
+      ? {
+          ...selection,
+          quantity: selection.quantity + 1,
+        }
+      : selection,
+  )
+}
+
 const reducer = (state: AppState, action: Action): AppState => {
-  // Pseudo-code:
-  // 1. Read the user's action.
-  // 2. Change only the part of state that action cares about.
-  // 3. Derive totals elsewhere so we do not store stale math.
   switch (action.type) {
     case 'OPEN_CART':
       return {
@@ -78,7 +104,7 @@ const reducer = (state: AppState, action: Action): AppState => {
         cartLines: [...state.cartLines, action.payload],
         buildABox: {
           ...state.buildABox,
-          selectedProductIds: [],
+          selections: [],
         },
       }
     case 'REMOVE_CART_LINE':
@@ -112,8 +138,30 @@ const reducer = (state: AppState, action: Action): AppState => {
           )
           .filter((line) => line.quantity > 0),
       }
-    case 'ADD_CUPCAKE_TO_BOX':
-      if (state.buildABox.selectedProductIds.length >= state.buildABox.boxSize) {
+    case 'SET_BUILD_A_BOX_TYPE':
+      return {
+        ...state,
+        buildABox: {
+          boxType: action.payload.boxType,
+          boxSize: BOX_SIZE_OPTIONS_BY_TYPE[action.payload.boxType][0],
+          selections: [],
+        },
+      }
+    case 'SET_BUILD_A_BOX_SIZE':
+      return {
+        ...state,
+        buildABox: {
+          ...state.buildABox,
+          boxSize: action.payload.boxSize,
+          selections: [],
+        },
+      }
+    case 'INCREMENT_BUILD_A_BOX_ITEM':
+      if (!state.buildABox.boxSize) {
+        return state
+      }
+
+      if (getSelectedCount(state.buildABox.selections) >= state.buildABox.boxSize) {
         return state
       }
 
@@ -121,20 +169,27 @@ const reducer = (state: AppState, action: Action): AppState => {
         ...state,
         buildABox: {
           ...state.buildABox,
-          selectedProductIds: [
-            ...state.buildABox.selectedProductIds,
+          selections: upsertBuildABoxSelection(
+            state.buildABox.selections,
             action.payload.productId,
-          ],
+          ),
         },
       }
-    case 'REMOVE_CUPCAKE_FROM_BOX':
+    case 'DECREMENT_BUILD_A_BOX_ITEM':
       return {
         ...state,
         buildABox: {
           ...state.buildABox,
-          selectedProductIds: state.buildABox.selectedProductIds.filter(
-            (_, index) => index !== action.payload.index,
-          ),
+          selections: state.buildABox.selections
+            .map((selection) =>
+              selection.productId === action.payload.productId
+                ? {
+                    ...selection,
+                    quantity: selection.quantity - 1,
+                  }
+                : selection,
+            )
+            .filter((selection) => selection.quantity > 0),
         },
       }
     case 'CLEAR_BOX':
@@ -142,7 +197,7 @@ const reducer = (state: AppState, action: Action): AppState => {
         ...state,
         buildABox: {
           ...state.buildABox,
-          selectedProductIds: [],
+          selections: [],
         },
       }
     default:
@@ -160,7 +215,15 @@ export const useAppStore = () => {
       hasBirthdayCandle: state.cartLines.some(
         (line) => line.productId === birthdayCandle.id,
       ),
-      isBoxFull: state.buildABox.selectedProductIds.length >= state.buildABox.boxSize,
+      selectedCount: getSelectedCount(state.buildABox.selections),
+      remainingCount: getRemainingCount(
+        state.buildABox.boxSize,
+        state.buildABox.selections,
+      ),
+      isBoxComplete: isBuildABoxComplete(
+        state.buildABox.boxSize,
+        state.buildABox.selections,
+      ),
     }),
     [state],
   )
@@ -183,18 +246,32 @@ export const useAppStore = () => {
       dispatch({ type: 'INCREMENT_CART_LINE', payload: { lineId } }),
     decrementCartLine: (lineId: string) =>
       dispatch({ type: 'DECREMENT_CART_LINE', payload: { lineId } }),
-    addCupcakeToBox: (productId: string) =>
-      dispatch({ type: 'ADD_CUPCAKE_TO_BOX', payload: { productId } }),
-    removeCupcakeFromBox: (index: number) =>
-      dispatch({ type: 'REMOVE_CUPCAKE_FROM_BOX', payload: { index } }),
+    setBuildABoxType: (boxType: CupcakeBoxType) =>
+      dispatch({ type: 'SET_BUILD_A_BOX_TYPE', payload: { boxType } }),
+    setBuildABoxSize: (boxSize: BuildABoxSize) =>
+      dispatch({ type: 'SET_BUILD_A_BOX_SIZE', payload: { boxSize } }),
+    incrementBuildABoxItem: (productId: string) =>
+      dispatch({ type: 'INCREMENT_BUILD_A_BOX_ITEM', payload: { productId } }),
+    decrementBuildABoxItem: (productId: string) =>
+      dispatch({ type: 'DECREMENT_BUILD_A_BOX_ITEM', payload: { productId } }),
     clearBox: () => dispatch({ type: 'CLEAR_BOX' }),
-    addBuildABoxToCart: (cupcakes: Product[]) =>
+    addBuildABoxToCart: (cupcakes: Product[]) => {
+      if (!state.buildABox.boxSize) {
+        return
+      }
+
       dispatch({
         type: 'ADD_BUILD_A_BOX_LINE',
         payload: {
-          ...createBuildABoxLine(cupcakes, state.buildABox.selectedProductIds),
+          ...createBuildABoxLine(
+            cupcakes,
+            state.buildABox.boxType,
+            state.buildABox.boxSize,
+            state.buildABox.selections,
+          ),
           id: crypto.randomUUID(),
         },
-      }),
+      })
+    },
   }
 }

@@ -1,25 +1,36 @@
-import { cupcakes } from '../../data/cupcakes'
+import { miniCupcakes, regularCupcakes } from '../../data/cupcakes'
 import { BuildABoxView } from '../../features/build-a-box/BuildABoxView'
-import { usePexelsImages } from '../../hooks/usePexelsImages'
 import { useAppShellContext } from '../useAppShellContext'
 
 export const BuildABoxRoute = () => {
-  const { state, selectors, addBuildABoxToCart, addCupcakeToBox, clearBox, removeCupcakeFromBox } =
-    useAppShellContext()
-  const { imageMap, isLoading } = usePexelsImages(cupcakes)
+  const {
+    state,
+    selectors,
+    addBuildABoxToCart,
+    clearBox,
+    decrementBuildABoxItem,
+    incrementBuildABoxItem,
+    setBuildABoxType,
+    setBuildABoxSize,
+  } = useAppShellContext()
+  const cupcakes =
+    state.buildABox.boxType === 'mini' ? miniCupcakes : regularCupcakes
 
   return (
     <BuildABoxView
+      boxType={state.buildABox.boxType}
       boxSize={state.buildABox.boxSize}
       cupcakes={cupcakes}
-      imageMap={imageMap}
-      isBoxFull={selectors.isBoxFull}
-      isImageLoading={isLoading}
-      onAddCupcake={addCupcakeToBox}
+      isBoxComplete={selectors.isBoxComplete}
+      onDecrementCupcake={decrementBuildABoxItem}
+      onIncrementCupcake={incrementBuildABoxItem}
       onAddToCart={() => addBuildABoxToCart(cupcakes)}
       onClearBox={clearBox}
-      onRemoveCupcake={removeCupcakeFromBox}
-      selectedProductIds={state.buildABox.selectedProductIds}
+      onSelectBoxType={setBuildABoxType}
+      onSelectBoxSize={setBuildABoxSize}
+      remainingCount={selectors.remainingCount}
+      selectedCount={selectors.selectedCount}
+      selections={state.buildABox.selections}
     />
   )
 }

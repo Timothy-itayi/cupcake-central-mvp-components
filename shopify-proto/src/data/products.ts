@@ -1,0 +1,68 @@
+import type { Product } from '../types/product'
+
+export const products: Product[] = [
+  {
+    id: 'birthday-cake',
+    name: 'Classic Birthday Cake',
+    priceCents: 6200,
+    category: 'cake',
+    description: 'A safe, fast-moving hero product for celebration intent.',
+    stockLevel: 5,
+    imageEmoji: '🎂',
+    imageGradient: 'linear-gradient(135deg, #fce7f3, #fed7aa)',
+  },
+  {
+    id: 'mini-gift-box',
+    name: 'Mini Cupcake Gift Box',
+    priceCents: 2800,
+    category: 'gift-box',
+    description: 'Small-format gifting option with broad appeal.',
+    stockLevel: 2,
+    imageEmoji: '🎁',
+    imageGradient: 'linear-gradient(135deg, #dbeafe, #e0e7ff)',
+  },
+  {
+    id: 'corporate-box',
+    name: 'Corporate Catering Box',
+    priceCents: 5400,
+    category: 'gift-box',
+    description: 'Designed for office meetings that need less boredom.',
+    stockLevel: 8,
+    imageEmoji: '🏢',
+    imageGradient: 'linear-gradient(135deg, #e0f2fe, #dbeafe)',
+  },
+  {
+    id: 'gluten-free-box',
+    name: 'Gluten-Free Cupcake Box',
+    priceCents: 3400,
+    category: 'gift-box',
+    description: 'Useful proof that dietary options can still convert.',
+    stockLevel: 3,
+    imageEmoji: '🌾',
+    imageGradient: 'linear-gradient(135deg, #ecfccb, #fef3c7)',
+  },
+  {
+    id: 'vegan-cake',
+    name: 'Vegan Celebration Cake',
+    priceCents: 6800,
+    category: 'cake',
+    description: 'Another strong category for modern gifting funnels.',
+    stockLevel: 1,
+    imageEmoji: '🌱',
+    imageGradient: 'linear-gradient(135deg, #dcfce7, #d9f99d)',
+  },
+  {
+    id: 'brownie-slab',
+    name: 'Chocolate Brownie Slab',
+    priceCents: 2400,
+    category: 'gift-box',
+    description: 'High-margin add-in for mixed dessert merchandising.',
+    stockLevel: 0,
+    imageEmoji: '🍫',
+    imageGradient: 'linear-gradient(135deg, #e7e5e4, #d6d3d1)',
+  },
+]
+
+export const starterCartProducts = products.filter((product) =>
+  ['birthday-cake', 'mini-gift-box', 'corporate-box'].includes(product.id),
+)

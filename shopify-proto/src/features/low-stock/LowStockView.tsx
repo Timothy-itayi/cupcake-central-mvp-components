@@ -4,9 +4,15 @@ import type { Product } from '../../types/product'
 
 type LowStockViewProps = {
   products: Product[]
+  imageMap: Record<string, { alt: string; src: string }>
+  isImageLoading: boolean
 }
 
-export const LowStockView = ({ products }: LowStockViewProps) => (
+export const LowStockView = ({
+  products,
+  imageMap,
+  isImageLoading,
+}: LowStockViewProps) => (
   <PageSection
     eyebrow="Component Three"
     title="Low-stock urgency indicator"
@@ -17,6 +23,10 @@ export const LowStockView = ({ products }: LowStockViewProps) => (
       show sold out. Otherwise show nothing and avoid visual spam.
     </div>
 
-    <ProductGrid products={products} />
+    <ProductGrid
+      imageMap={imageMap}
+      isImageLoading={isImageLoading}
+      products={products}
+    />
   </PageSection>
 )

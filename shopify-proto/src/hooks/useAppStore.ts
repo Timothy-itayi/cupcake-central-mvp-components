@@ -4,12 +4,11 @@ import { birthdayCandle } from '../data/addOns'
 import { starterCartProducts } from '../data/products'
 import { BOX_SIZE, createBuildABoxLine } from '../features/build-a-box/buildABox.helpers'
 import { createCartLine, getCartItemCount, getCartSubtotal } from '../features/cart-drawer/cart.helpers'
-import type { AppState, AppView } from '../types/app'
+import type { AppState } from '../types/app'
 import type { CartLine } from '../types/cart'
 import type { Product } from '../types/product'
 
 type Action =
-  | { type: 'SET_VIEW'; payload: AppView }
   | { type: 'OPEN_CART' }
   | { type: 'CLOSE_CART' }
   | { type: 'ADD_PRODUCT_TO_CART'; payload: { product: Product; source?: CartLine['source'] } }
@@ -22,7 +21,6 @@ type Action =
   | { type: 'CLEAR_BOX' }
 
 const initialState: AppState = {
-  activeView: 'build-a-box',
   isCartOpen: false,
   cartLines: starterCartProducts.slice(0, 2).map((product) => createCartLine(product)),
   buildABox: {
@@ -54,11 +52,6 @@ const reducer = (state: AppState, action: Action): AppState => {
   // 2. Change only the part of state that action cares about.
   // 3. Derive totals elsewhere so we do not store stale math.
   switch (action.type) {
-    case 'SET_VIEW':
-      return {
-        ...state,
-        activeView: action.payload,
-      }
     case 'OPEN_CART':
       return {
         ...state,
@@ -175,7 +168,6 @@ export const useAppStore = () => {
   return {
     state,
     selectors,
-    setView: (view: AppView) => dispatch({ type: 'SET_VIEW', payload: view }),
     openCart: () => dispatch({ type: 'OPEN_CART' }),
     closeCart: () => dispatch({ type: 'CLOSE_CART' }),
     addProductToCart: (product: Product, source?: CartLine['source']) =>

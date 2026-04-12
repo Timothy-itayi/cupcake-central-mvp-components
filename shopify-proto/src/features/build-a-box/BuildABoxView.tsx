@@ -10,6 +10,8 @@ type BuildABoxViewProps = {
   selectedProductIds: string[]
   boxSize: number
   isBoxFull: boolean
+  imageMap: Record<string, { alt: string; src: string }>
+  isImageLoading: boolean
   onAddCupcake: (productId: string) => void
   onRemoveCupcake: (index: number) => void
   onClearBox: () => void
@@ -21,6 +23,8 @@ export const BuildABoxView = ({
   selectedProductIds,
   boxSize,
   isBoxFull,
+  imageMap,
+  isImageLoading,
   onAddCupcake,
   onRemoveCupcake,
   onClearBox,
@@ -51,7 +55,9 @@ export const BuildABoxView = ({
 
           <BuildABoxGrid
             cupcakes={cupcakes}
+            imageMap={imageMap}
             isBoxFull={isBoxFull}
+            isImageLoading={isImageLoading}
             onAdd={onAddCupcake}
           />
         </div>

@@ -7,6 +7,7 @@ export const birthdayCandle: Product = {
   category: 'add-on',
   description: 'A simple candle upsell that lifts order value without friction.',
   stockLevel: 50,
+  imageQuery: 'birthday candle celebration',
   imageEmoji: '🕯️',
   imageGradient: 'linear-gradient(135deg, #ede9fe, #fce7f3)',
 }
@@ -20,6 +21,7 @@ export const addOns: Product[] = [
     category: 'add-on',
     description: 'Short note card for birthdays, office orders, or apologies.',
     stockLevel: 25,
+    imageQuery: 'gift note card stationery',
     imageEmoji: '💌',
     imageGradient: 'linear-gradient(135deg, #fae8ff, #fbcfe8)',
   },

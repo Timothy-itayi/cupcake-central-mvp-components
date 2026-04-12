@@ -9,6 +9,7 @@ export type Product = {
   category: ProductCategory
   description: string
   stockLevel: number
+  imageQuery: string
   imageEmoji: string
   imageGradient: string
 }

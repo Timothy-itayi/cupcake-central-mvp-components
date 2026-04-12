@@ -1,33 +1,11 @@
-import type { ReactNode } from 'react'
+import { Outlet } from 'react-router-dom'
 
 import { addOns, birthdayCandle } from '../data/addOns'
 import { cupcakes } from '../data/cupcakes'
 import { products, starterCartProducts } from '../data/products'
 import { useAppStore } from '../hooks/useAppStore'
-import { BuildABoxView } from '../features/build-a-box/BuildABoxView'
 import { CartDrawer } from '../features/cart-drawer/CartDrawer'
-import { CartLabView } from '../features/cart-drawer/CartLabView'
-import { LowStockView } from '../features/low-stock/LowStockView'
 import { TopNav } from './navigation/TopNav'
-
-const renderView = (
-  activeView: 'build-a-box' | 'cart-drawer' | 'low-stock',
-  content: {
-    buildABox: ReactNode
-    cartDrawer: ReactNode
-    lowStock: ReactNode
-  },
-) => {
-  switch (activeView) {
-    case 'cart-drawer':
-      return content.cartDrawer
-    case 'low-stock':
-      return content.lowStock
-    case 'build-a-box':
-    default:
-      return content.buildABox
-  }
-}
 
 export const AppShell = () => {
   const {
@@ -44,17 +22,11 @@ export const AppShell = () => {
     openCart,
     removeCartLine,
     removeCupcakeFromBox,
-    setView,
   } = useAppStore()
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(251,207,232,0.45),_transparent_34%),linear-gradient(180deg,_#fff7ed_0%,_#ffffff_60%)] text-stone-900">
-      <TopNav
-        activeView={state.activeView}
-        cartItemCount={selectors.cartItemCount}
-        onOpenCart={openCart}
-        onViewChange={setView}
-      />
+      <TopNav cartItemCount={selectors.cartItemCount} onOpenCart={openCart} />
 
       <main className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
         <section className="rounded-[2rem] border border-rose-100 bg-white/70 p-6 shadow-sm">
@@ -81,33 +53,24 @@ export const AppShell = () => {
                 <li>{starterCartProducts.length} starter products for cart behaviour</li>
                 <li>{products.length} products with live low-stock messaging</li>
                 <li>{addOns.length} add-ons including the candle upsell</li>
+                <li>Each component now lives on its own route</li>
               </ul>
             </div>
           </div>
         </section>
 
-        {renderView(state.activeView, {
-          buildABox: (
-            <BuildABoxView
-              boxSize={state.buildABox.boxSize}
-              cupcakes={cupcakes}
-              isBoxFull={selectors.isBoxFull}
-              onAddCupcake={addCupcakeToBox}
-              onAddToCart={() => addBuildABoxToCart(cupcakes)}
-              onClearBox={clearBox}
-              onRemoveCupcake={removeCupcakeFromBox}
-              selectedProductIds={state.buildABox.selectedProductIds}
-            />
-          ),
-          cartDrawer: (
-            <CartLabView
-              onAddProduct={addProductToCart}
-              onOpenCart={openCart}
-              products={starterCartProducts}
-            />
-          ),
-          lowStock: <LowStockView products={products} />,
-        })}
+        <Outlet
+          context={{
+            state,
+            selectors,
+            addBuildABoxToCart,
+            addProductToCart,
+            addCupcakeToBox,
+            clearBox,
+            openCart,
+            removeCupcakeFromBox,
+          }}
+        />
       </main>
 
       <CartDrawer

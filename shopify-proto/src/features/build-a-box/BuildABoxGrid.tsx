@@ -1,16 +1,21 @@
 import { Button } from '../../components/ui/Button'
+import { ProductImage } from '../../components/ui/ProductImage'
 import { formatCurrency } from '../../utils/currency'
 import type { Product } from '../../types/product'
 
 type BuildABoxGridProps = {
   cupcakes: Product[]
   isBoxFull: boolean
+  imageMap: Record<string, { alt: string; src: string }>
+  isImageLoading: boolean
   onAdd: (productId: string) => void
 }
 
 export const BuildABoxGrid = ({
   cupcakes,
   isBoxFull,
+  imageMap,
+  isImageLoading,
   onAdd,
 }: BuildABoxGridProps) => (
   <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -19,12 +24,14 @@ export const BuildABoxGrid = ({
         key={cupcake.id}
         className="flex h-full flex-col rounded-[1.5rem] border border-stone-200 bg-white p-4 shadow-sm"
       >
-        <div
-          className="flex min-h-28 items-center justify-center rounded-[1.25rem] text-5xl"
-          style={{ background: cupcake.imageGradient }}
-        >
-          {cupcake.imageEmoji}
-        </div>
+        <ProductImage
+          title={cupcake.name}
+          imageAlt={imageMap[cupcake.id]?.alt}
+          imageEmoji={cupcake.imageEmoji}
+          imageGradient={cupcake.imageGradient}
+          imageUrl={imageMap[cupcake.id]?.src}
+          isLoading={isImageLoading}
+        />
 
         <div className="mt-4 flex flex-1 flex-col gap-3">
           <div>

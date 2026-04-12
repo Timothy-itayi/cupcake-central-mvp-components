@@ -1,16 +1,21 @@
 import { PageSection } from '../../components/layout/PageSection'
 import { Button } from '../../components/ui/Button'
+import { ProductImage } from '../../components/ui/ProductImage'
 import { formatCurrency } from '../../utils/currency'
 import type { Product } from '../../types/product'
 
 type CartLabViewProps = {
   products: Product[]
+  imageMap: Record<string, { alt: string; src: string }>
+  isImageLoading: boolean
   onAddProduct: (product: Product) => void
   onOpenCart: () => void
 }
 
 export const CartLabView = ({
   products,
+  imageMap,
+  isImageLoading,
   onAddProduct,
   onOpenCart,
 }: CartLabViewProps) => (
@@ -38,12 +43,14 @@ export const CartLabView = ({
           key={product.id}
           className="flex flex-col rounded-[1.5rem] border border-stone-200 bg-white p-4 shadow-sm"
         >
-          <div
-            className="flex min-h-28 items-center justify-center rounded-[1.25rem] text-5xl"
-            style={{ background: product.imageGradient }}
-          >
-            {product.imageEmoji}
-          </div>
+          <ProductImage
+            title={product.name}
+            imageAlt={imageMap[product.id]?.alt}
+            imageEmoji={product.imageEmoji}
+            imageGradient={product.imageGradient}
+            imageUrl={imageMap[product.id]?.src}
+            isLoading={isImageLoading}
+          />
           <div className="mt-4 flex flex-1 flex-col gap-3">
             <div>
               <div className="flex items-start justify-between gap-3">

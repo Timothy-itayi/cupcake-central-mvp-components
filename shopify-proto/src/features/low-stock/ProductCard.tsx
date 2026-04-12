@@ -1,23 +1,36 @@
+import { ProductImage } from '../../components/ui/ProductImage'
 import { formatCurrency } from '../../utils/currency'
 import { getStockBadge } from './stock.helpers'
 import type { Product } from '../../types/product'
 
 type ProductCardProps = {
   product: Product
+  imageUrl?: string
+  imageAlt?: string
+  isImageLoading?: boolean
 }
 
-export const ProductCard = ({ product }: ProductCardProps) => {
+export const ProductCard = ({
+  product,
+  imageUrl,
+  imageAlt,
+  isImageLoading = false,
+}: ProductCardProps) => {
   const badge = getStockBadge(product.stockLevel)
 
   return (
     <article className="overflow-hidden rounded-[1.5rem] border border-stone-200 bg-white shadow-sm">
       <div className="relative">
-        <div
-          className="flex min-h-48 items-center justify-center text-6xl"
-          style={{ background: product.imageGradient }}
-        >
-          {product.imageEmoji}
-        </div>
+        <ProductImage
+          title={product.name}
+          imageAlt={imageAlt}
+          imageEmoji={product.imageEmoji}
+          imageGradient={product.imageGradient}
+          imageUrl={imageUrl}
+          heightClassName="min-h-48"
+          emojiClassName="text-6xl"
+          isLoading={isImageLoading}
+        />
 
         {badge ? (
           <span

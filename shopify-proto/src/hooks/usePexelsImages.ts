@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { canUsePexels, searchPexelsImage } from '../services/pexels'
+import { canUsePexels, searchPexelsImages, type PexelsImageCandidate } from '../services/pexels'
 import type { Product } from '../types/product'
 
 type ProductImageMap = Record<string, { alt: string; src: string }>
@@ -20,15 +20,21 @@ export const usePexelsImages = (products: Product[]) => {
       setIsLoading(true)
 
       try {
-        // Pseudo-code:
-        // 1. Search one relevant image for each product query.
-        // 2. Keep only successful results.
-        // 3. Fall back to local gradients if any search fails.
-        const results = await Promise.all(
+        // Guided logic:
+        // 1. Ask Pexels for several candidates per product.
+        // 2. Try the most specific product phrases first.
+        // 3. Reuse no photo ID on the same screen unless there is no alternative.
+        const candidateLists = await Promise.all(
           products.map(async (product) => {
-            const image = await searchPexelsImage(product.imageQuery)
+            const searchTerms = product.imageQueries ?? [product.imageQuery]
+            const candidateGroups = await Promise.all(
+              searchTerms.map((query) => searchPexelsImages(query, 4)),
+            )
 
-            return [product.id, image] as const
+            return [
+              product.id,
+              candidateGroups.flat(),
+            ] as const
           }),
         )
 
@@ -36,13 +42,21 @@ export const usePexelsImages = (products: Product[]) => {
           return
         }
 
-        setImageMap(
-          Object.fromEntries(
-            results.filter((entry): entry is [string, { alt: string; src: string }] =>
-              Boolean(entry[1]),
-            ),
-          ),
-        )
+        const usedPhotoIds = new Set<number>()
+        const nextImageMap: ProductImageMap = {}
+
+        for (const [productId, candidates] of candidateLists) {
+          const uniqueCandidate =
+            candidates.find((candidate) => !usedPhotoIds.has(candidate.photoId)) ??
+            candidates[0]
+
+          if (uniqueCandidate) {
+            usedPhotoIds.add(uniqueCandidate.photoId)
+            nextImageMap[productId] = toImageMapEntry(uniqueCandidate)
+          }
+        }
+
+        setImageMap(nextImageMap)
       } catch (error) {
         if (!isCancelled) {
           setImageMap({})
@@ -68,3 +82,8 @@ export const usePexelsImages = (products: Product[]) => {
     isEnabled: canUsePexels,
   }
 }
+
+const toImageMapEntry = (candidate: PexelsImageCandidate) => ({
+  alt: candidate.alt,
+  src: candidate.src,
+})

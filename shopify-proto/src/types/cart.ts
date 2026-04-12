@@ -9,4 +9,6 @@ export type CartLine = {
   unitPriceCents: number
   quantity: number
   source: CartLineSource
+  imageUrl?: string
+  imageAlt?: string
 }

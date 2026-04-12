@@ -1,7 +1,6 @@
 import { useMemo, useReducer } from 'react'
 
 import { birthdayCandle } from '../data/addOns'
-import { starterCartProducts } from '../data/products'
 import {
   BOX_SIZE_OPTIONS_BY_TYPE,
   createBuildABoxLine,
@@ -31,7 +30,7 @@ type Action =
 
 const initialState: AppState = {
   isCartOpen: false,
-  cartLines: starterCartProducts.slice(0, 2).map((product) => createCartLine(product)),
+  cartLines: [],
   buildABox: {
     boxType: 'regular',
     boxSize: 12,

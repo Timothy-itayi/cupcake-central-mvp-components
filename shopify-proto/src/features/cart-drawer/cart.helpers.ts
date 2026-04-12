@@ -20,4 +20,6 @@ export const createCartLine = (
   unitPriceCents: product.priceCents,
   quantity: 1,
   source,
+  imageUrl: product.localImagePath,
+  imageAlt: product.name,
 })

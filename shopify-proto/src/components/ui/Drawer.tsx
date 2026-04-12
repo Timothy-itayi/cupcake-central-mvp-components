@@ -19,7 +19,7 @@ export const Drawer = ({ isOpen, onClose, title, children }: DrawerProps) => (
       type="button"
       aria-label="Close cart drawer overlay"
       className={[
-        'absolute inset-0 bg-stone-950/45 transition-opacity',
+        'drawer-overlay absolute inset-0 transition-opacity',
         isOpen ? 'opacity-100' : 'opacity-0',
       ].join(' ')}
       onClick={onClose}
@@ -27,7 +27,7 @@ export const Drawer = ({ isOpen, onClose, title, children }: DrawerProps) => (
 
     <aside
       className={[
-        'absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-white shadow-2xl transition-transform duration-300',
+        'drawer-shell absolute right-0 top-0 flex h-full w-full max-w-md flex-col transition-transform duration-300',
         isOpen ? 'translate-x-0' : 'translate-x-full',
       ].join(' ')}
       aria-label={title}

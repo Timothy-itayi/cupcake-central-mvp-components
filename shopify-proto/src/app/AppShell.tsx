@@ -25,11 +25,10 @@ export const AppShell = () => {
   } = useAppStore()
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,_#fff6ef_0%,_#fffdfa_40%,_#ffffff_100%)] text-stone-900">
+    <div className="site-shell">
       <TopNav cartItemCount={selectors.cartItemCount} onOpenCart={openCart} />
 
-      <main className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
-    
+      <main className="site-main">
         <Outlet
           context={{
             state,
@@ -58,6 +57,8 @@ export const AppShell = () => {
         subtotalCents={selectors.cartSubtotal}
         upsellName={birthdayCandle.name}
         upsellPriceCents={birthdayCandle.priceCents}
+        upsellImageUrl={birthdayCandle.localImagePath}
+        upsellImageAlt={birthdayCandle.name}
       />
     </div>
   )

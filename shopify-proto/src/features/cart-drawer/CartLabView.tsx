@@ -20,14 +20,14 @@ export const CartLabView = ({
   onOpenCart,
 }: CartLabViewProps) => (
   <PageSection
-    eyebrow="Component Two"
-    title="Cart drawer and upsell logic"
-    description="This view exists to seed the cart quickly during the demo. The drawer itself stays global, which is how a real storefront would behave."
+    eyebrow="Cart And Upsell"
+    title="Keep the basket global and the nudge tasteful."
+    description="This view exists to seed the cart quickly for the exercise, but the drawer remains global so the interaction behaves more like an actual storefront and less like a disconnected demo page."
   >
-    <div className="flex flex-col gap-4 rounded-[1.5rem] border border-dashed border-stone-300 bg-stone-50 p-5 sm:flex-row sm:items-center sm:justify-between">
+    <div className="soft-panel soft-panel--dashed flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
       <div className="space-y-2">
-        <h3 className="text-lg font-semibold text-stone-950">Open the global cart drawer</h3>
-        <p className="max-w-2xl text-sm leading-6 text-stone-600">
+        <h3 className="text-lg font-semibold text-[var(--ink)]">Open the global cart drawer</h3>
+        <p className="max-w-2xl text-sm leading-6">
           Pseudo-code: customer taps cart, current lines slide in, upsell appears only when
           the add-on is missing.
         </p>
@@ -39,10 +39,7 @@ export const CartLabView = ({
 
     <div className="grid gap-4 lg:grid-cols-3">
       {products.map((product) => (
-        <article
-          key={product.id}
-          className="flex flex-col rounded-[1.5rem] border border-stone-200 bg-white p-4 shadow-sm"
-        >
+        <article key={product.id} className="product-card p-4">
           <ProductImage
             title={product.name}
             imageAlt={imageMap[product.id]?.alt}
@@ -51,18 +48,16 @@ export const CartLabView = ({
             imageUrl={imageMap[product.id]?.src}
             isLoading={isImageLoading}
           />
-          <div className="mt-4 flex flex-1 flex-col gap-3">
+          <div className="product-card__body px-0 pb-0">
             <div>
               <div className="flex items-start justify-between gap-3">
-                <h3 className="text-lg font-semibold text-stone-900">{product.name}</h3>
-                <span className="text-sm font-semibold text-stone-500">
-                  {formatCurrency(product.priceCents)}
-                </span>
+                <h3 className="product-card__name">{product.name}</h3>
+                <span className="product-card__price">{formatCurrency(product.priceCents)}</span>
               </div>
-              <p className="mt-2 text-sm leading-6 text-stone-600">{product.description}</p>
+              <p className="product-card__description">{product.description}</p>
             </div>
 
-            <Button fullWidth onClick={() => onAddProduct(product)}>
+            <Button fullWidth className="mt-auto" onClick={() => onAddProduct(product)}>
               Add to cart
             </Button>
           </div>

@@ -21,7 +21,7 @@ export const ProductImage = ({
 }: ProductImageProps) => (
   <div
     className={[
-      'relative overflow-hidden rounded-[1.25rem] bg-[#fff7f4]',
+      'product-image-frame',
       heightClassName,
       isLoading ? 'animate-pulse' : '',
     ].join(' ')}
@@ -31,11 +31,11 @@ export const ProductImage = ({
       <img
         src={imageUrl}
         alt={imageAlt || title}
-        className="h-full w-full object-cover"
+        className="product-image-media"
         loading="lazy"
       />
     ) : (
-      <div className={`flex h-full w-full items-center justify-center ${emojiClassName}`}>
+      <div className={`product-image-media flex items-center justify-center ${emojiClassName}`}>
         <span aria-hidden="true">{imageEmoji}</span>
         <span className="sr-only">{title}</span>
       </div>

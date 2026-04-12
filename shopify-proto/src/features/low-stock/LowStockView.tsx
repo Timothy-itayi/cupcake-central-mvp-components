@@ -14,11 +14,11 @@ export const LowStockView = ({
   isImageLoading,
 }: LowStockViewProps) => (
   <PageSection
-    eyebrow="Component Three"
-    title="Low-stock urgency indicator"
-    description="The badge only appears when stock is low enough to matter. If inventory is zero, the messaging switches to sold out instead of pretending scarcity and availability are the same thing."
+    eyebrow="Low Stock"
+    title="Use urgency sparingly or it just becomes wallpaper."
+    description="The badge only appears when stock is low enough to matter. If inventory is zero, the message switches to sold out instead of pretending scarcity and availability are interchangeable."
   >
-    <div className="rounded-[1.5rem] border border-dashed border-stone-300 bg-stone-50 p-5 text-sm leading-6 text-stone-600">
+    <div className="soft-panel soft-panel--dashed p-5 text-sm leading-6">
       Pseudo-code: if stock is between 1 and 3, show an urgency badge. If stock is 0,
       show sold out. Otherwise show nothing and avoid visual spam.
     </div>

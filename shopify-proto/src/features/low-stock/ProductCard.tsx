@@ -17,28 +17,28 @@ export const ProductCard = ({
   isImageLoading = false,
 }: ProductCardProps) => {
   const badge = getStockBadge(product.stockLevel)
+  const resolvedImageUrl = product.localImagePath ?? imageUrl
+  const resolvedImageAlt = imageAlt ?? product.name
 
   return (
-    <article className="overflow-hidden rounded-[1.5rem] border border-stone-200 bg-white shadow-sm">
+    <article className="product-card p-4">
       <div className="relative">
         <ProductImage
           title={product.name}
-          imageAlt={imageAlt}
+          imageAlt={resolvedImageAlt}
           imageEmoji={product.imageEmoji}
           imageGradient={product.imageGradient}
-          imageUrl={imageUrl}
+          imageUrl={resolvedImageUrl}
           heightClassName="min-h-48"
           emojiClassName="text-6xl"
-          isLoading={isImageLoading}
+          isLoading={isImageLoading && !resolvedImageUrl}
         />
 
         {badge ? (
           <span
             className={[
-              'absolute left-3 top-3 rounded-full px-3 py-2 text-xs font-semibold tracking-[0.02em] shadow-sm',
-              badge.tone === 'urgent'
-                ? 'bg-rose-500 text-white'
-                : 'bg-stone-900 text-white',
+              'status-badge absolute left-3 top-3 shadow-sm',
+              badge.tone === 'urgent' ? 'status-badge--urgent' : 'status-badge--default',
             ].join(' ')}
           >
             {badge.label}
@@ -46,14 +46,12 @@ export const ProductCard = ({
         ) : null}
       </div>
 
-      <div className="space-y-3 p-4">
+      <div className="product-card__body px-0 pb-0">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="text-lg font-semibold text-stone-900">{product.name}</h3>
-          <span className="text-sm font-semibold text-stone-500">
-            {formatCurrency(product.priceCents)}
-          </span>
+          <h3 className="product-card__name">{product.name}</h3>
+          <span className="product-card__price">{formatCurrency(product.priceCents)}</span>
         </div>
-        <p className="text-sm leading-6 text-stone-600">{product.description}</p>
+        <p className="product-card__description">{product.description}</p>
       </div>
     </article>
   )

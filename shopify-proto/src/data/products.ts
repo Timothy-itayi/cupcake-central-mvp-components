@@ -9,6 +9,7 @@ export const products: Product[] = [
     description: 'A safe, fast-moving hero product for celebration intent.',
     stockLevel: 5,
     imageQuery: 'birthday cake bakery',
+    localImagePath: '/cakes/CAKE-CELE-BBERRY.webp',
     imageEmoji: '🎂',
     imageGradient: 'linear-gradient(135deg, #fce7f3, #fed7aa)',
   },
@@ -22,6 +23,7 @@ export const products: Product[] = [
     imageQuery: 'cupcake gift box bakery',
     imageEmoji: '🎁',
     imageGradient: 'linear-gradient(135deg, #dbeafe, #e0e7ff)',
+    localImagePath: '/catering/CC_CATERING25_24_V_-1.webp',
   },
   {
     id: 'corporate-box',
@@ -33,6 +35,7 @@ export const products: Product[] = [
     imageQuery: 'dessert catering box bakery',
     imageEmoji: '🏢',
     imageGradient: 'linear-gradient(135deg, #e0f2fe, #dbeafe)',
+    localImagePath: '/catering/CC_CATERING25_60-1.webp',
   },
   {
     id: 'gluten-free-box',
@@ -44,6 +47,7 @@ export const products: Product[] = [
     imageQuery: 'gluten free cupcakes bakery',
     imageEmoji: '🌾',
     imageGradient: 'linear-gradient(135deg, #ecfccb, #fef3c7)',
+    localImagePath: '/gifts/GB-MC-15-ASSORTED-GF.webp',
   },
   {
     id: 'vegan-cake',
@@ -55,6 +59,7 @@ export const products: Product[] = [
     imageQuery: 'vegan cake bakery',
     imageEmoji: '🌱',
     imageGradient: 'linear-gradient(135deg, #dcfce7, #d9f99d)',
+    localImagePath: '/cakes/CAKE-NAKED-CNC-3.webp',
   },
   {
     id: 'brownie-slab',
@@ -66,6 +71,7 @@ export const products: Product[] = [
     imageQuery: 'chocolate brownie dessert bakery',
     imageEmoji: '🍫',
     imageGradient: 'linear-gradient(135deg, #e7e5e4, #d6d3d1)',
+    localImagePath: '/brownie/SLICES-BROWNIE-TRAY_2c5f372e-9988-495c-98b9-a8bf0daabb82.webp',
   },
 ]
 

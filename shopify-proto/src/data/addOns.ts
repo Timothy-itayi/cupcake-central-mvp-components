@@ -1,15 +1,16 @@
 import type { Product } from '../types/product'
 
 export const birthdayCandle: Product = {
-  id: 'birthday-candle',
-  name: 'Birthday Candle',
+  id: 'gift-box-ribbon',
+  name: 'Gift Box Ribbon',
   priceCents: 200,
   category: 'add-on',
-  description: 'A simple candle upsell that lifts order value without friction.',
+  description: 'Simple ribbon add-on to make the gift box feel finished without much effort.',
   stockLevel: 50,
-  imageQuery: 'birthday candle celebration',
-  imageEmoji: '🕯️',
-  imageGradient: 'linear-gradient(135deg, #ede9fe, #fce7f3)',
+  imageQuery: 'gift ribbon present',
+  imageEmoji: '🎀',
+  imageGradient: 'linear-gradient(135deg, #fce7f3, #fae8ff)',
+  localImagePath: '/gifts/Gift-Box-Ribbon_1.webp',
 }
 
 export const addOns: Product[] = [

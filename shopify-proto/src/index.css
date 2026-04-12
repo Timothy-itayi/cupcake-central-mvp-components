@@ -93,7 +93,7 @@
   }
 
   .site-main {
-    width: min(100%, 80rem);
+    width: min(90%, 100rem);
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -307,6 +307,7 @@
     padding: 0.82rem 1.15rem;
     font-size: 0.94rem;
     font-weight: 700;
+    white-space: nowrap;
     transition:
       background-color 180ms ease,
       border-color 180ms ease,
@@ -369,6 +370,8 @@
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .product-card {
@@ -449,6 +452,7 @@
     justify-content: space-between;
     gap: 0.75rem;
     margin-top: auto;
+    width: 100%;
     padding: 0.55rem;
     border: 1px solid rgba(217, 187, 165, 0.42);
     border-radius: 999px;
@@ -468,6 +472,8 @@
   }
 
   .quantity-readout {
+    flex: 1 1 auto;
+    min-width: 0;
     text-align: center;
   }
 

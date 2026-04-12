@@ -16,7 +16,7 @@ type BuildABoxViewProps = {
   isBoxComplete: boolean
   onSelectBoxType: (boxType: CupcakeBoxType) => void
   onSelectBoxSize: (boxSize: BuildABoxSize) => void
-  onIncrementCupcake: (productId: string) => void
+  onIncrementCupcake: (productId: string, maxQuantity: number) => void
   onDecrementCupcake: (productId: string) => void
   onClearBox: () => void
   onAddToCart: () => void
@@ -43,8 +43,8 @@ export const BuildABoxView = ({
   return (
     <PageSection
       eyebrow="Build Your Own Box"
-      title="Choose your flavours and fill the box properly."
-      description="Borrow the warm bakery tone, keep the rules honest, and make the selection feel immediate: choose regular or mini cupcakes, lock the right box size, then build the flavour mix with live progress."
+      title="Choose your flavours and fill your box."
+      description="Pick regular or mini cupcakes, choose the right box size, and build your mix with live progress and clear stock guidance on limited flavours."
     >
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_272px]">
         <div className="space-y-8">
@@ -53,7 +53,7 @@ export const BuildABoxView = ({
               <div className="space-y-2">
                 <p className="section-eyebrow">Start Here</p>
                 <h3 className="text-2xl font-semibold text-[var(--ink)] sm:text-[2rem]">
-                  Build around the real box rules, not wishful thinking.
+                  Start with the box that suits your order.
                 </h3>
                 <p className="max-w-2xl text-sm leading-7 sm:text-base">
                   Regular cupcakes belong in 6 or 12 packs. Mini cupcakes belong in 15 or 30
@@ -61,7 +61,7 @@ export const BuildABoxView = ({
                   tray.
                 </p>
               </div>
-              <Button variant="ghost" onClick={onClearBox}>
+              <Button variant="ghost" className="self-start whitespace-nowrap px-5" onClick={onClearBox}>
                 Reset box
               </Button>
             </div>
@@ -130,16 +130,6 @@ export const BuildABoxView = ({
               </div>
             </div>
 
-            <div className="soft-panel soft-panel--mint mt-4 flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="mini-meta">Selection Rules</p>
-                <p className="mt-2 text-sm sm:text-base">
-                  No mixing mini and regular in the same box. The preview on the right tracks
-                  the exact tray you are filling.
-                </p>
-              </div>
-              <span className="pill-label">{boxType === 'mini' ? 'Mini range' : 'Regular range'}</span>
-            </div>
           </section>
 
           <section className="space-y-4">
@@ -150,12 +140,11 @@ export const BuildABoxView = ({
                   Fill the tray one flavour at a time.
                 </h3>
                 <p className="mt-2 max-w-2xl text-sm leading-7 sm:text-base">
-                  Keep the interaction simple: hover the image for movement, use the quantity
-                  controls for the mix, and let the summary tell the customer exactly how close
-                  the box is to complete.
+                  Add the flavours you want, keep an eye on the box progress, and look out for
+                  low-stock notes on flavours that are nearly gone for today.
                 </p>
               </div>
-              <span className="pill-label">
+              <span className="pill-label self-start sm:self-auto">
                 {boxSize
                   ? `${selectedCount} of ${boxSize} selected`
                   : 'Pick a box size first'}

@@ -45,6 +45,7 @@ export const createBuildABoxLine = (
   id: `build-a-box-${boxType}-${boxSize}`,
   productId: `build-a-box-${boxType}-${boxSize}`,
   name: `${boxType === 'mini' ? 'Mini' : 'Regular'} Build-a-Box ${boxSize} Pack`,
+  category: 'gift-box',
   unitPriceCents: getBuildABoxSubtotal(cupcakes, selections),
   quantity: 1,
   source: 'build-a-box',

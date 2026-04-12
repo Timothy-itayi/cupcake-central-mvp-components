@@ -3,6 +3,7 @@ import { formatCurrency } from '../../utils/currency'
 
 type UpsellBannerProps = {
   title: string
+  description: string
   priceCents: number
   imageUrl?: string
   imageAlt?: string
@@ -11,6 +12,7 @@ type UpsellBannerProps = {
 
 export const UpsellBanner = ({
   title,
+  description,
   priceCents,
   imageUrl,
   imageAlt,
@@ -26,12 +28,9 @@ export const UpsellBanner = ({
         />
       ) : null}
       <div className="min-w-0">
-        <p className="section-eyebrow !text-[var(--gold-500)]">Quick Upsell</p>
+        <p className="section-eyebrow !text-[var(--gold-500)]">Suggested Add-On</p>
         <h3 className="mt-2 text-lg font-semibold text-[var(--ink)]">{title}</h3>
-        <p className="mt-2 text-sm leading-6">
-          Show one sensible add-on when it actually improves the gift, not a random trinket
-          that looks algorithmically desperate.
-        </p>
+        <p className="mt-2 text-sm leading-6">{description}</p>
       </div>
     </div>
     <Button className="mt-4" onClick={onAdd}>

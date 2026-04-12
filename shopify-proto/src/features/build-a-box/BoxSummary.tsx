@@ -27,9 +27,9 @@ export const BoxSummary = ({
     ? `${boxType === 'mini' ? 'Mini' : 'Regular'} ${activeBoxSize}-pack`
     : 'Choose a box'
   const helperCopy = !activeBoxSize
-    ? 'Pick a valid box size and the tray preview will switch on immediately.'
+    ? 'Choose a box size to start building your selection.'
     : isBoxComplete
-      ? `${boxLabel} complete. Good. Add it to cart and move on.`
+      ? `${boxLabel} complete and ready to add to your basket.`
       : `${remainingCount} slot${remainingCount === 1 ? '' : 's'} left in this ${boxLabel.toLowerCase()}.`
 
   return (
@@ -82,13 +82,13 @@ export const BoxSummary = ({
         </summary>
         <div className="mt-3">
           <p>
-            Regular cupcakes ship in 6 or 12. Mini cupcakes ship in 15 or 30. One box type at
-            a time, because mixing rules just creates operational nonsense.
+            Regular cupcakes come in 6 or 12 packs. Mini cupcakes come in 15 or 30 packs. Choose
+            one box type at a time so the box stays consistent from start to finish.
           </p>
           <p className="mt-2">
             {isBoxComplete
-              ? 'Your tray is full and ready for the cart drawer.'
-              : 'Keep selecting flavours until the preview is full, then send the completed box to cart in one step.'}
+              ? 'Your box is full and ready for checkout.'
+              : 'Keep selecting flavours until every slot is filled, then add the completed box to your basket in one step.'}
           </p>
         </div>
       </details>

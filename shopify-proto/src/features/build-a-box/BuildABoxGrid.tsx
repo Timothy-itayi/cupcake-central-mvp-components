@@ -1,6 +1,7 @@
 import { Button } from '../../components/ui/Button'
 import { ProductImage } from '../../components/ui/ProductImage'
 import { formatCurrency } from '../../utils/currency'
+import { isLowStockLevel } from '../../utils/inventory'
 import type { BuildABoxSelection } from '../../types/buildABox'
 import type { Product } from '../../types/product'
 
@@ -8,7 +9,7 @@ type BuildABoxGridProps = {
   cupcakes: Product[]
   selections: BuildABoxSelection[]
   remainingCount: number
-  onIncrement: (productId: string) => void
+  onIncrement: (productId: string, maxQuantity: number) => void
   onDecrement: (productId: string) => void
 }
 
@@ -27,7 +28,15 @@ export const BuildABoxGrid = ({
     <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
       {cupcakes.map((cupcake) => {
         const quantity = quantityByProductId[cupcake.id] ?? 0
-        const canIncrement = remainingCount > 0
+        const isSoldOut = cupcake.stockLevel === 0
+        const isLowStock = isLowStockLevel(cupcake.stockLevel)
+        const hasReachedStockLimit = quantity >= cupcake.stockLevel
+        const canIncrement = remainingCount > 0 && !isSoldOut && !hasReachedStockLimit
+        const stockMessage = isSoldOut
+          ? 'Sold out today. Please choose another flavour.'
+          : isLowStock
+            ? `Only ${cupcake.stockLevel} left in today's bake.`
+            : null
 
         return (
           <article key={cupcake.id} className="product-card p-4">
@@ -52,6 +61,16 @@ export const BuildABoxGrid = ({
                     {cupcake.dietaryTag === 'GF' ? 'Gluten Free' : 'Vegan'}
                   </span>
                 ) : null}
+                {stockMessage ? (
+                  <p
+                    className={[
+                      'mt-3 text-sm font-semibold',
+                      isSoldOut ? 'text-[var(--ink-soft)]' : 'text-[var(--blush-500)]',
+                    ].join(' ')}
+                  >
+                    {stockMessage}
+                  </p>
+                ) : null}
               </div>
 
               <div className="quantity-control">
@@ -71,13 +90,18 @@ export const BuildABoxGrid = ({
                 <Button
                   aria-label={`Add one ${cupcake.name}`}
                   disabled={!canIncrement}
-                  onClick={() => onIncrement(cupcake.id)}
+                  onClick={() => onIncrement(cupcake.id, cupcake.stockLevel)}
                   variant={canIncrement ? 'primary' : 'ghost'}
                   className="icon-button"
                 >
                   +
                 </Button>
               </div>
+              {hasReachedStockLimit && !isSoldOut ? (
+                <p className="mt-3 text-sm leading-6 text-[var(--blush-500)]">
+                  You&apos;ve added the last available one for this flavour.
+                </p>
+              ) : null}
             </div>
           </article>
         )

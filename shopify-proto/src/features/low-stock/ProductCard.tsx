@@ -1,3 +1,4 @@
+import { Button } from '../../components/ui/Button'
 import { ProductImage } from '../../components/ui/ProductImage'
 import { formatCurrency } from '../../utils/currency'
 import { getStockBadge } from './stock.helpers'
@@ -5,20 +6,25 @@ import type { Product } from '../../types/product'
 
 type ProductCardProps = {
   product: Product
+  alternativeProduct: Product | null
   imageUrl?: string
   imageAlt?: string
   isImageLoading?: boolean
+  onAddAlternative: (product: Product) => void
 }
 
 export const ProductCard = ({
   product,
+  alternativeProduct,
   imageUrl,
   imageAlt,
   isImageLoading = false,
+  onAddAlternative,
 }: ProductCardProps) => {
-  const badge = getStockBadge(product.stockLevel)
+  const badge = getStockBadge(product)
   const resolvedImageUrl = product.localImagePath ?? imageUrl
   const resolvedImageAlt = imageAlt ?? product.name
+  const isSoldOut = product.stockLevel === 0
 
   return (
     <article className="product-card p-4">
@@ -52,6 +58,23 @@ export const ProductCard = ({
           <span className="product-card__price">{formatCurrency(product.priceCents)}</span>
         </div>
         <p className="product-card__description">{product.description}</p>
+
+        {isSoldOut && alternativeProduct ? (
+          <div className="mt-4 rounded-[1.25rem] border border-[color:var(--stroke)] bg-[rgba(255,250,245,0.9)] p-4">
+            <p className="text-sm font-semibold text-[var(--ink)]">Sold out for today</p>
+            <p className="mt-1 text-sm leading-6">
+              Try {alternativeProduct.name} instead while the current bake is still available.
+            </p>
+            <Button
+              className="mt-3"
+              fullWidth
+              variant="secondary"
+              onClick={() => onAddAlternative(alternativeProduct)}
+            >
+              Add {alternativeProduct.name}
+            </Button>
+          </div>
+        ) : null}
       </div>
     </article>
   )

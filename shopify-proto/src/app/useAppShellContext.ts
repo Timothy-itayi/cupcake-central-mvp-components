@@ -1,5 +1,6 @@
 import { useOutletContext } from 'react-router-dom'
 
+import type { CartUpsellRecommendation } from '../features/cart-drawer/cart.helpers'
 import type { AppState } from '../types/app'
 import type { BuildABoxSize } from '../types/buildABox'
 import type { CartLine } from '../types/cart'
@@ -10,7 +11,9 @@ type AppShellContext = {
   selectors: {
     cartItemCount: number
     cartSubtotal: number
-    hasBirthdayCandle: boolean
+    amountUntilFreeDelivery: number
+    hasFreeDelivery: boolean
+    recommendedUpsell: CartUpsellRecommendation | null
     selectedCount: number
     remainingCount: number
     isBoxComplete: boolean
@@ -19,7 +22,7 @@ type AppShellContext = {
   addProductToCart: (product: Product, source?: CartLine['source']) => void
   setBuildABoxType: (boxType: CupcakeBoxType) => void
   setBuildABoxSize: (boxSize: BuildABoxSize) => void
-  incrementBuildABoxItem: (productId: string) => void
+  incrementBuildABoxItem: (productId: string, maxQuantity: number) => void
   decrementBuildABoxItem: (productId: string) => void
   clearBox: () => void
   openCart: () => void

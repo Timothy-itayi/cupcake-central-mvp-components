@@ -1,6 +1,5 @@
 import { useMemo, useReducer } from 'react'
 
-import { birthdayCandle } from '../data/addOns'
 import {
   BOX_SIZE_OPTIONS_BY_TYPE,
   createBuildABoxLine,
@@ -8,7 +7,13 @@ import {
   getSelectedCount,
   isBuildABoxComplete,
 } from '../features/build-a-box/buildABox.helpers'
-import { createCartLine, getCartItemCount, getCartSubtotal } from '../features/cart-drawer/cart.helpers'
+import {
+  createCartLine,
+  getAmountUntilFreeDelivery,
+  getCartItemCount,
+  getCartSubtotal,
+  getRecommendedUpsell,
+} from '../features/cart-drawer/cart.helpers'
 import type { AppState } from '../types/app'
 import type { BuildABoxSelection, BuildABoxSize } from '../types/buildABox'
 import type { CartLine } from '../types/cart'
@@ -24,7 +29,7 @@ type Action =
   | { type: 'DECREMENT_CART_LINE'; payload: { lineId: string } }
   | { type: 'SET_BUILD_A_BOX_TYPE'; payload: { boxType: CupcakeBoxType } }
   | { type: 'SET_BUILD_A_BOX_SIZE'; payload: { boxSize: BuildABoxSize } }
-  | { type: 'INCREMENT_BUILD_A_BOX_ITEM'; payload: { productId: string } }
+  | { type: 'INCREMENT_BUILD_A_BOX_ITEM'; payload: { productId: string; maxQuantity: number } }
   | { type: 'DECREMENT_BUILD_A_BOX_ITEM'; payload: { productId: string } }
   | { type: 'CLEAR_BOX' }
 
@@ -39,17 +44,33 @@ const initialState: AppState = {
 }
 
 const upsertCartProduct = (lines: CartLine[], nextLine: CartLine) => {
+  if (nextLine.stockLevel === 0) {
+    return lines
+  }
+
   const match = lines.find((line) => line.productId === nextLine.productId)
 
   if (!match) {
-    return [...lines, nextLine]
+    return [
+      ...lines,
+      {
+        ...nextLine,
+        quantity:
+          nextLine.stockLevel !== undefined
+            ? Math.min(nextLine.quantity, nextLine.stockLevel)
+            : nextLine.quantity,
+      },
+    ]
   }
 
   return lines.map((line) =>
     line.productId === nextLine.productId
       ? {
           ...line,
-          quantity: line.quantity + nextLine.quantity,
+          quantity:
+            nextLine.stockLevel !== undefined
+              ? Math.min(line.quantity + nextLine.quantity, nextLine.stockLevel)
+              : line.quantity + nextLine.quantity,
         }
       : line,
   )
@@ -118,7 +139,10 @@ const reducer = (state: AppState, action: Action): AppState => {
           line.id === action.payload.lineId
             ? {
                 ...line,
-                quantity: line.quantity + 1,
+                quantity:
+                  line.stockLevel !== undefined
+                    ? Math.min(line.quantity + 1, line.stockLevel)
+                    : line.quantity + 1,
               }
             : line,
         ),
@@ -161,6 +185,14 @@ const reducer = (state: AppState, action: Action): AppState => {
       }
 
       if (getSelectedCount(state.buildABox.selections) >= state.buildABox.boxSize) {
+        return state
+      }
+
+      if (
+        (state.buildABox.selections.find(
+          (selection) => selection.productId === action.payload.productId,
+        )?.quantity ?? 0) >= action.payload.maxQuantity
+      ) {
         return state
       }
 
@@ -207,13 +239,16 @@ const reducer = (state: AppState, action: Action): AppState => {
 export const useAppStore = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const selectors = useMemo(
-    () => ({
+  const selectors = useMemo(() => {
+    const cartSubtotal = getCartSubtotal(state.cartLines)
+    const amountUntilFreeDelivery = getAmountUntilFreeDelivery(cartSubtotal)
+
+    return {
       cartItemCount: getCartItemCount(state.cartLines),
-      cartSubtotal: getCartSubtotal(state.cartLines),
-      hasBirthdayCandle: state.cartLines.some(
-        (line) => line.productId === birthdayCandle.id,
-      ),
+      cartSubtotal,
+      amountUntilFreeDelivery,
+      hasFreeDelivery: amountUntilFreeDelivery === 0,
+      recommendedUpsell: getRecommendedUpsell(state.cartLines),
       selectedCount: getSelectedCount(state.buildABox.selections),
       remainingCount: getRemainingCount(
         state.buildABox.boxSize,
@@ -223,9 +258,8 @@ export const useAppStore = () => {
         state.buildABox.boxSize,
         state.buildABox.selections,
       ),
-    }),
-    [state],
-  )
+    }
+  }, [state])
 
   return {
     state,
@@ -234,11 +268,6 @@ export const useAppStore = () => {
     closeCart: () => dispatch({ type: 'CLOSE_CART' }),
     addProductToCart: (product: Product, source?: CartLine['source']) =>
       dispatch({ type: 'ADD_PRODUCT_TO_CART', payload: { product, source } }),
-    addBirthdayCandle: () =>
-      dispatch({
-        type: 'ADD_PRODUCT_TO_CART',
-        payload: { product: birthdayCandle, source: 'upsell' },
-      }),
     removeCartLine: (lineId: string) =>
       dispatch({ type: 'REMOVE_CART_LINE', payload: { lineId } }),
     incrementCartLine: (lineId: string) =>
@@ -249,8 +278,8 @@ export const useAppStore = () => {
       dispatch({ type: 'SET_BUILD_A_BOX_TYPE', payload: { boxType } }),
     setBuildABoxSize: (boxSize: BuildABoxSize) =>
       dispatch({ type: 'SET_BUILD_A_BOX_SIZE', payload: { boxSize } }),
-    incrementBuildABoxItem: (productId: string) =>
-      dispatch({ type: 'INCREMENT_BUILD_A_BOX_ITEM', payload: { productId } }),
+    incrementBuildABoxItem: (productId: string, maxQuantity: number) =>
+      dispatch({ type: 'INCREMENT_BUILD_A_BOX_ITEM', payload: { productId, maxQuantity } }),
     decrementBuildABoxItem: (productId: string) =>
       dispatch({ type: 'DECREMENT_BUILD_A_BOX_ITEM', payload: { productId } }),
     clearBox: () => dispatch({ type: 'CLEAR_BOX' }),

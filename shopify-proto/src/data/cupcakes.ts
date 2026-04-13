@@ -146,7 +146,7 @@ export const miniCupcakes: Product[] = [
   },
   {
     id: 'mini-lemon',
-    name: 'Mini Lemon',
+    name: 'Lemon Curd Mini',
     priceCents: 300,
     category: 'cupcake',
     description: 'Bright lemon mini cupcake for lighter citrus mixes.',

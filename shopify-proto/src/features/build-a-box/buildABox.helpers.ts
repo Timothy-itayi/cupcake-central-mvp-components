@@ -41,12 +41,21 @@ export const createBuildABoxLine = (
   boxType: CupcakeBoxType,
   boxSize: BuildABoxSize,
   selections: BuildABoxSelection[],
-): CartLine => ({
-  id: `build-a-box-${boxType}-${boxSize}`,
-  productId: `build-a-box-${boxType}-${boxSize}`,
-  name: `${boxType === 'mini' ? 'Mini' : 'Regular'} Build-a-Box ${boxSize} Pack`,
-  category: 'gift-box',
-  unitPriceCents: getBuildABoxSubtotal(cupcakes, selections),
-  quantity: 1,
-  source: 'build-a-box',
-})
+): CartLine => {
+  let imageUrl: string | undefined
+  if (boxType === 'regular' && boxSize === 6) imageUrl = '/build-a-box/GB-CC-6-ASSORTED.webp'
+  if (boxType === 'regular' && boxSize === 12) imageUrl = '/build-a-box/CC-25-PRO-GB-12-CUPCAKES-2.webp'
+  if (boxType === 'mini' && boxSize === 15) imageUrl = '/build-a-box/GB-MC-15-ASSORTED.webp'
+  if (boxType === 'mini' && boxSize === 30) imageUrl = '/build-a-box/GB-MC-30-ASSORTED-N.webp'
+
+  return {
+    id: `build-a-box-${boxType}-${boxSize}`,
+    productId: `build-a-box-${boxType}-${boxSize}`,
+    name: `${boxType === 'mini' ? 'Mini' : 'Regular'} Build-a-Box ${boxSize} Pack`,
+    category: 'gift-box',
+    unitPriceCents: getBuildABoxSubtotal(cupcakes, selections),
+    quantity: 1,
+    source: 'build-a-box',
+    imageUrl,
+  }
+}

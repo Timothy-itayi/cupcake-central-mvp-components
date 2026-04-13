@@ -63,10 +63,10 @@ export const BoxSummary = ({
   }
 
   return (
-    <aside className="bg-white rounded-[2px] shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+    <aside className="bg-white rounded-[2px] shadow-sm border border-gray-100 border-t-[3px] border-t-[#d96a97] overflow-hidden flex flex-col">
       <div className="p-6 border-b border-gray-100 bg-[#fafafa]">
         <h2 className="text-lg font-extrabold text-gray-900 tracking-wider uppercase mb-2">Box Progress</h2>
-        <p className="text-[11px] font-extrabold text-gray-500 uppercase tracking-widest">
+        <p className="text-[11px] font-bold text-gray-500 uppercase tracking-widest">
           {activeBoxSize ? boxLabel : 'Choose box'}
         </p>
       </div>
@@ -77,7 +77,7 @@ export const BoxSummary = ({
             <span className="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest">
               Selected
             </span>
-            <span className="font-bold text-gray-500 text-sm">
+            <span className="font-extrabold text-gray-900 text-sm">
               {selectedCount} / {activeBoxSize ?? 0}
             </span>
           </div>

@@ -6,7 +6,7 @@ const logoSrc = '/logo/ccc_logo_24.avif'
 const navLinks = [
   { path: '/build-a-box', label: 'BUILD A BOX' },
   { path: '/cart-lab', label: 'CART UP SELL' },
-  { path: '/low-stock', label: 'LOW STOCK' },
+  { path: 'https://www.timothyitayi.com', label: 'CONTACT', external: true },
 ]
 
 type TopNavProps = {
@@ -15,10 +15,12 @@ type TopNavProps = {
 }
 
 export const TopNav = ({ cartItemCount, onOpenCart }: TopNavProps) => (
-  <header className="bg-white sticky top-0 z-40 shadow-sm">
+ 
+  
+  <header className="bg-white sticky top-0 z-50 shadow-sm w-full">
     {/* Top promotion bar */}
-    <div className="bg-[#4a9a84] text-white text-center py-2 text-[0.7rem] font-extrabold tracking-widest uppercase">
-      $5 DELIVERY ON ORDERS OVER $45
+    <div className="bg-[#4a9a84] text-white text-center py-2 px-4 text-[0.7rem] font-extrabold tracking-widest uppercase">
+    Cupcake Central Protype for their signature Build-a-Box feature 
     </div>
     
     {/* Main header area */}
@@ -34,7 +36,7 @@ export const TopNav = ({ cartItemCount, onOpenCart }: TopNavProps) => (
         <div className="relative hidden lg:block">
           <input 
             type="text" 
-            placeholder="Search our range" 
+            placeholder="Fake Search..." 
             className="border border-gray-300 pl-10 pr-4 py-2 text-sm w-64 focus:outline-none focus:border-[#4a9a84] placeholder-gray-500 font-medium"
           />
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
@@ -43,7 +45,7 @@ export const TopNav = ({ cartItemCount, onOpenCart }: TopNavProps) => (
         {/* Phone */}
         <a href="tel:0390774542" className="hidden md:flex items-center gap-2 bg-[#4a9a84] text-white px-5 py-2 text-sm font-bold hover:bg-[#3d806d] transition-colors">
           <Phone className="w-4 h-4" />
-          (03) 9077 4542
+          (03) 33333 (fake number)
         </a>
 
         {/* User */}
@@ -72,16 +74,27 @@ export const TopNav = ({ cartItemCount, onOpenCart }: TopNavProps) => (
         <ul className="flex items-center justify-between py-4">
           {navLinks.map((link) => (
             <li key={link.path}>
-              <NavLink 
-                to={link.path} 
-                className={({ isActive }) => 
-                  `text-[0.75rem] font-extrabold tracking-widest hover:text-[#d96a97] transition-colors ${
-                    isActive ? 'text-[#d96a97]' : 'text-gray-900'
-                  }`
-                }
-              >
-                {link.label}
-              </NavLink>
+              {link.external ? (
+                <a 
+                  href={link.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[0.75rem] font-extrabold tracking-widest text-gray-900 hover:text-[#d96a97] transition-colors"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <NavLink 
+                  to={link.path} 
+                  className={({ isActive }) => 
+                    `text-[0.75rem] font-extrabold tracking-widest hover:text-[#d96a97] transition-colors ${
+                      isActive ? 'text-[#d96a97]' : 'text-gray-900'
+                    }`
+                  }
+                >
+                  {link.label}
+                </NavLink>
+              )}
             </li>
           ))}
         </ul>

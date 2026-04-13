@@ -130,7 +130,7 @@ export const CartLabView = ({
             <textarea
               id="gift-message"
               rows={4}
-              placeholder="lolol"
+              placeholder="Enter your gift message here..."
               className="w-full border border-gray-400 rounded-[2px] p-4 text-sm focus:outline-none focus:border-[#d96a97] resize-none"
             />
             <div className="text-[11px] font-bold text-gray-500 mt-2">5/120</div>
@@ -145,7 +145,7 @@ export const CartLabView = ({
             <textarea
               id="delivery-instructions"
               rows={4}
-              placeholder="Leave driver a message, no specific delivery time requests. For gift messages, see section above."
+              placeholder="No delivery as this is a prototype..."
               className="w-full border border-gray-400 rounded-[2px] p-4 text-sm focus:outline-none focus:border-[#d96a97] resize-none placeholder-gray-500"
             />
             <div className="text-[11px] font-bold text-gray-900 mt-2">0/120 Characters.</div>

@@ -3,7 +3,6 @@ import { BoxSummary } from './BoxSummary'
 import { BOX_SIZE_OPTIONS_BY_TYPE, getBuildABoxSubtotal } from './buildABox.helpers'
 import type { BuildABoxSelection, BuildABoxSize } from '../../types/buildABox'
 import type { CupcakeBoxType, Product } from '../../types/product'
-import { Filter } from 'lucide-react'
 
 const heroBannerSrc = '/hero-banner/Collection_Banner_Build_Your_Own_Box_-_Desktop_1.webp'
 
@@ -44,17 +43,17 @@ export const BuildABoxView = ({
   return (
     <div className="bg-[#fffaf5] min-h-screen">
       {/* Hero Banner */}
-      <div className="w-full relative flex items-center justify-end overflow-hidden" style={{ minHeight: '350px' }}>
+      <div className="w-full relative bg-[#eebcd1]">
         <img 
           src={heroBannerSrc} 
           alt="" 
-          className="absolute inset-0 w-full h-full object-cover object-[center_35%]"
+          className="w-full h-auto object-cover max-h-[600px] md:max-h-[none]"
         />
-        <div className="relative z-10 max-w-[1400px] mx-auto w-full px-8 lg:px-16 text-right pb-10 pt-10">
-          <h1 className="text-4xl md:text-6xl lg:text-[6rem] font-extrabold uppercase tracking-tight mb-4 leading-[0.9] drop-shadow-[0_2px_8px_rgba(0,0,0,0.15)] text-white">
+        <div className="absolute inset-0 flex flex-col justify-center z-10 max-w-[1400px] mx-auto w-full px-4 lg:px-8 text-right">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] xl:text-[6rem] font-extrabold uppercase tracking-tight mb-2 md:mb-4 leading-[0.9] drop-shadow-[0_2px_8px_rgba(0,0,0,0.15)] text-white">
             BUILD YOUR<br />OWN BOX
           </h1>
-          <p className="text-lg md:text-2xl font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.15)] leading-snug text-white">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.15)] leading-snug text-white ml-auto">
             Classic, Vegan and Gluten-Free<br />Cupcakes. Pick your favourites,<br />fill a box and share the joy
           </p>
         </div>
@@ -66,7 +65,7 @@ export const BuildABoxView = ({
         <div className="flex-1 w-full">
           
           {/* Box Configuration UI */}
-          <div className="bg-white p-10 rounded-[2px] shadow-sm mb-6 border-t-[3px] border-[#d96a97]">
+          <div className="bg-white p-6 md:p-8 rounded-[2px] shadow-sm mb-6 border-t-[3px] border-[#d96a97]">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
               <h2 className="text-lg font-extrabold text-gray-900 tracking-wider uppercase">
                 1. Choose your box size
@@ -79,18 +78,18 @@ export const BuildABoxView = ({
               </button>
             </div>
             
-            <div className="flex flex-col md:flex-row gap-8">
+            <div className="flex flex-col md:flex-row items-stretch gap-8">
               {/* Box Type */}
-              <div className="flex-1">
+              <div className="flex-1 flex flex-col">
                 <p className="text-[11px] font-extrabold text-gray-500 uppercase tracking-widest mb-3">Product Type</p>
-                <div className="flex flex-col gap-2">
+                <div className="flex gap-2 flex-1">
                   {(['regular', 'mini'] as const).map((typeOption) => {
                     const isActive = boxType === typeOption
                     return (
                       <button
                         key={typeOption}
                         onClick={() => onSelectBoxType(typeOption)}
-                        className={`text-left p-3 border-[1.5px] rounded-[2px] transition-colors ${
+                        className={`flex flex-col items-center justify-center flex-1 p-4 border-[1.5px] rounded-[2px] transition-colors ${
                           isActive 
                             ? 'border-[#4a9a84] bg-white' 
                             : 'border-gray-200 hover:border-gray-300'
@@ -99,7 +98,7 @@ export const BuildABoxView = ({
                         <p className={`font-bold text-[13px] ${isActive ? 'text-[#4a9a84]' : 'text-gray-900'}`}>
                           {typeOption === 'regular' ? 'Regular cupcakes' : 'Mini cupcakes'}
                         </p>
-                        <p className="text-[11px] text-gray-500 mt-1 tracking-wide">
+                        <p className="text-[11px] text-gray-500 mt-2 tracking-wide">
                           {typeOption === 'regular' ? 'Available in 6 or 12' : 'Available in 15 or 30'}
                         </p>
                       </button>
@@ -109,16 +108,16 @@ export const BuildABoxView = ({
               </div>
 
               {/* Box Size */}
-              <div className="flex-1">
+              <div className="flex-1 flex flex-col">
                 <p className="text-[11px] font-extrabold text-gray-500 uppercase tracking-widest mb-3">Box Capacity</p>
-                <div className="grid grid-cols-2 gap-2 h-full">
+                <div className="grid grid-cols-2 gap-2 flex-1">
                   {boxSizeOptions.map((sizeOption) => {
                     const isActive = boxSize === sizeOption
                     return (
                       <button
                         key={sizeOption}
                         onClick={() => onSelectBoxSize(sizeOption)}
-                        className={`text-center px-2 py-1 border-[1.5px] rounded-[2px] transition-colors h-full flex flex-col items-center justify-center text-sm ${
+                        className={`flex flex-col items-center justify-center p-4 border-[1.5px] rounded-[2px] transition-colors ${
                    
                           isActive 
                             ? 'border-[#d96a97] bg-white' 
@@ -139,23 +138,8 @@ export const BuildABoxView = ({
             </div>
           </div>
 
-          {/* Controls Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between py-6 mb-2 border-b-0">
-            <div className="flex-1 flex justify-start">
-              <button className="flex items-center gap-2 text-[11px] font-extrabold text-gray-800 tracking-widest uppercase">
-                <Filter className="w-3.5 h-3.5" /> Filter
-              </button>
-            </div>
-
-            <div className="flex-1 flex justify-center mt-4 sm:mt-0 text-[11px] font-extrabold text-gray-800 tracking-widest uppercase">
-              <div className="flex items-center gap-2 cursor-pointer hover:text-gray-600 transition-colors">
-                Sort by: <span className="font-medium lowercase tracking-normal text-[13px] ml-1">featured</span> <span className="ml-1 opacity-50">›</span>
-              </div>
-            </div>
-            
-            <div className="flex-1 flex justify-end text-[11px] font-extrabold text-gray-800 tracking-widest uppercase mt-4 sm:mt-0 opacity-70">
-              {cupcakes.length} products
-            </div>
+          <div className="flex justify-end text-[11px] font-extrabold text-gray-800 tracking-widest uppercase mb-6 opacity-70">
+            {cupcakes.length} products
           </div>
 
           {/* Products Grid */}

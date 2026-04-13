@@ -167,18 +167,33 @@ const reducer = (state: AppState, action: Action): AppState => {
         buildABox: {
           boxType: action.payload.boxType,
           boxSize: BOX_SIZE_OPTIONS_BY_TYPE[action.payload.boxType][0],
-          selections: [],
+          selections: [], // Reset selections when switching product type since products are different
         },
       }
-    case 'SET_BUILD_A_BOX_SIZE':
+    case 'SET_BUILD_A_BOX_SIZE': {
+      const newBoxSize = action.payload.boxSize
+      let currentCount = 0
+      
+      // Trim selections if the new box size is smaller than the current selected count
+      const newSelections = state.buildABox.selections.map(selection => {
+        if (currentCount >= newBoxSize) return { ...selection, quantity: 0 }
+        
+        const spaceLeft = newBoxSize - currentCount
+        const quantityToKeep = Math.min(selection.quantity, spaceLeft)
+        currentCount += quantityToKeep
+        
+        return { ...selection, quantity: quantityToKeep }
+      }).filter(selection => selection.quantity > 0)
+
       return {
         ...state,
         buildABox: {
           ...state.buildABox,
-          boxSize: action.payload.boxSize,
-          selections: [],
+          boxSize: newBoxSize,
+          selections: newSelections,
         },
       }
+    }
     case 'INCREMENT_BUILD_A_BOX_ITEM':
       if (!state.buildABox.boxSize) {
         return state

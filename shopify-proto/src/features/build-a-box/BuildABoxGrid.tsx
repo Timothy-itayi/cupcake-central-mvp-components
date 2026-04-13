@@ -110,12 +110,6 @@ export const BuildABoxGrid = ({
                   </div>
                 )}
               </div>
-              
-              {isLowStock && quantity === 0 && (
-                <p className="mt-2 text-[10px] text-[#d96a97] font-bold text-center">
-                  Only {cupcake.stockLevel} left!
-                </p>
-              )}
             </div>
           </article>
         )

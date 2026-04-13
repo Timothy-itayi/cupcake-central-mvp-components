@@ -49,13 +49,15 @@ export const BuildABoxView = ({
           alt="" 
           className="w-full h-auto object-cover max-h-[600px] md:max-h-[none]"
         />
-        <div className="absolute inset-0 flex flex-col justify-center z-10 max-w-[1400px] mx-auto w-full px-4 lg:px-8 text-right">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] xl:text-[6rem] font-extrabold uppercase tracking-tight mb-2 md:mb-4 leading-[0.9] drop-shadow-[0_2px_8px_rgba(0,0,0,0.15)] text-white">
-            BUILD YOUR<br />OWN BOX
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.15)] leading-snug text-white ml-auto">
-            Classic, Vegan and Gluten-Free<br />Cupcakes. Pick your favourites,<br />fill a box and share the joy
-          </p>
+        <div className="absolute inset-0 flex flex-col justify-center items-end z-10 max-w-[1400px] mx-auto w-full px-4 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[6rem] xl:text-[4rem] font-extrabold uppercase tracking-tight mb-2 md:mb-4 leading-[0.9] drop-shadow-[0_2px_8px_rgba(0,0,0,0.15)] text-white">
+              BUILD YOUR<br />OWN BOX
+            </h1>
+            <p className="text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.15)] leading-snug text-white mx-auto">
+              Classic, Vegan and Gluten-Free<br />Cupcakes. Pick your favourites,<br />fill a box and share the joy
+            </p>
+          </div>
         </div>
       </div>
 

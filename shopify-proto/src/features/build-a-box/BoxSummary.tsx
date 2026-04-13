@@ -1,4 +1,3 @@
-import { Button } from '../../components/ui/Button'
 import { formatCurrency } from '../../utils/currency'
 import type { CupcakeBoxType } from '../../types/product'
 
@@ -11,6 +10,7 @@ type BoxSummaryProps = {
   isBoxComplete: boolean
   onClear: () => void
   onAddToCart: () => void
+  isMobile?: boolean
 }
 
 export const BoxSummary = ({
@@ -22,84 +22,104 @@ export const BoxSummary = ({
   isBoxComplete,
   onClear,
   onAddToCart,
+  isMobile = false,
 }: BoxSummaryProps) => {
   const boxLabel = activeBoxSize
     ? `${boxType === 'mini' ? 'Mini' : 'Regular'} ${activeBoxSize}-pack`
     : 'Choose a box'
-  const helperCopy = !activeBoxSize
-    ? 'Choose a box size to start building your selection.'
-    : isBoxComplete
-      ? `${boxLabel} complete and ready to add to your basket.`
-      : `${remainingCount} slot${remainingCount === 1 ? '' : 's'} left in this ${boxLabel.toLowerCase()}.`
 
-  return (
-    <aside className="summary-card soft-panel soft-panel--blush">
-      <div>
-        <p className="section-eyebrow">Box Progress</p>
-        <h3 className="mt-2 text-[1.7rem] font-semibold leading-tight text-[var(--ink)]">
-          {activeBoxSize ? boxLabel : 'Choose your box'}
-        </h3>
-        <p className="mt-2 text-sm leading-6">{helperCopy}</p>
-      </div>
+  const progressPercent = activeBoxSize ? Math.min((selectedCount / activeBoxSize) * 100, 100) : 0
 
-      <div className="soft-panel p-4">
-        <div className="flex items-center justify-between text-sm font-medium text-[var(--ink-soft)]">
-          <span>Progress</span>
-          <span>
-            {selectedCount} / {activeBoxSize ?? 0}
+  if (isMobile) {
+    return (
+      <div className="bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] p-4 flex flex-col gap-3">
+        <div className="flex items-center justify-between text-sm">
+          <span className="font-extrabold text-gray-900 tracking-wider uppercase text-[10px]">
+            {selectedCount} / {activeBoxSize ?? 0} Selected
+          </span>
+          <span className="font-extrabold text-[#d96a97]">
+            {formatCurrency(subtotalCents)}
           </span>
         </div>
-        <div className="progress-track mt-3">
-          <div
-            className="progress-fill"
-            style={{
-              width: activeBoxSize ? `${Math.min((selectedCount / activeBoxSize) * 100, 100)}%` : '0%',
-            }}
+        <div className="h-1.5 w-full bg-pink-50 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-[#d96a97] transition-all duration-300"
+            style={{ width: `${progressPercent}%` }}
           />
         </div>
+        <button 
+          disabled={!isBoxComplete} 
+          onClick={onAddToCart}
+          className={`w-full py-3 rounded-[2px] font-extrabold text-[11px] tracking-widest uppercase transition-colors ${
+            isBoxComplete 
+              ? 'bg-[#d96a97] text-white hover:bg-[#c85f8d]' 
+              : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+          }`}
+        >
+          {isBoxComplete ? 'ADD TO CART' : `SELECT ${remainingCount} MORE`}
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <aside className="bg-white rounded-[2px] shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+      <div className="p-6 border-b border-gray-100 bg-[#fafafa]">
+        <h2 className="text-lg font-extrabold text-gray-900 tracking-wider uppercase mb-2">Box Progress</h2>
+        <p className="text-[11px] font-extrabold text-gray-500 uppercase tracking-widest">
+          {activeBoxSize ? boxLabel : 'Choose box'}
+        </p>
       </div>
 
-      <dl className="soft-panel summary-stats p-4">
-        <div className="summary-stat">
-          <dt>Selected</dt>
-          <dd className="font-semibold text-[var(--ink)]">
-            {selectedCount} / {activeBoxSize ?? 0}
-          </dd>
+      <div className="p-6 flex flex-col gap-6">
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest">
+              Selected
+            </span>
+            <span className="font-bold text-gray-500 text-sm">
+              {selectedCount} / {activeBoxSize ?? 0}
+            </span>
+          </div>
+          <div className="h-2 w-full bg-pink-50 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-[#d96a97] transition-all duration-300"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
         </div>
-        <div className="summary-stat">
-          <dt>Still to choose</dt>
-          <dd className="font-semibold text-[var(--ink)]">{activeBoxSize ? remainingCount : '-'}</dd>
-        </div>
-        <div className="summary-stat">
-          <dt>Running subtotal</dt>
-          <dd className="font-semibold text-[var(--ink)]">{formatCurrency(subtotalCents)}</dd>
-        </div>
-      </dl>
 
-      <details className="soft-panel soft-panel--mint p-4 text-sm leading-6">
-        <summary className="cursor-pointer list-none font-semibold text-[var(--mint-500)] marker:hidden">
-          How this works
-        </summary>
-        <div className="mt-3">
-          <p>
-            Regular cupcakes come in 6 or 12 packs. Mini cupcakes come in 15 or 30 packs. Choose
-            one box type at a time so the box stays consistent from start to finish.
-          </p>
-          <p className="mt-2">
-            {isBoxComplete
-              ? 'Your box is full and ready for checkout.'
-              : 'Keep selecting flavours until every slot is filled, then add the completed box to your basket in one step.'}
-          </p>
+        <div className="flex flex-col gap-3 py-4 border-y border-gray-100">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-extrabold text-gray-500 uppercase tracking-widest">Still to choose</span>
+            <span className="font-extrabold text-gray-900 text-sm">{activeBoxSize ? remainingCount : '-'}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-extrabold text-gray-500 uppercase tracking-widest">Subtotal</span>
+            <span className="font-extrabold text-[#d96a97] text-base">{formatCurrency(subtotalCents)}</span>
+          </div>
         </div>
-      </details>
 
-      <div className="space-y-2.5">
-        <Button fullWidth variant="primary" disabled={!isBoxComplete} onClick={onAddToCart}>
-          {isBoxComplete ? 'Add box to cart' : 'Fill every slot to continue'}
-        </Button>
-        <Button fullWidth variant="ghost" onClick={onClear}>
-          Clear selection
-        </Button>
+        <div className="flex flex-col gap-3">
+          <button 
+            disabled={!isBoxComplete} 
+            onClick={onAddToCart}
+            className={`w-full py-4 rounded-[2px] font-extrabold text-[12px] tracking-widest uppercase transition-colors ${
+              isBoxComplete 
+                ? 'bg-[#d96a97] text-white hover:bg-[#c85f8d]' 
+                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+            }`}
+          >
+            {isBoxComplete ? 'ADD TO CART' : 'COMPLETE BOX FIRST'}
+          </button>
+          
+          <button 
+            onClick={onClear}
+            className="w-full py-3 text-[10px] font-extrabold text-gray-500 hover:text-gray-900 uppercase tracking-widest transition-colors"
+          >
+            Clear Selection
+          </button>
+        </div>
       </div>
     </aside>
   )

@@ -26,10 +26,10 @@ export const AppShell = () => {
   const recommendedUpsell = selectors.recommendedUpsell
 
   return (
-    <div className="site-shell">
+    <div className="flex flex-col min-h-screen bg-[#fffaf5]">
       <TopNav cartItemCount={selectors.cartItemCount} onOpenCart={openCart} />
 
-      <main className="site-main">
+      <main className="flex-1 w-full pb-16">
         <Outlet
           context={{
             state,

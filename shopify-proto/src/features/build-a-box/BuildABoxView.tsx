@@ -169,7 +169,7 @@ export const BuildABoxView = ({
         </div>
         
         {/* Right Sidebar / Summary */}
-        <div className="w-full xl:w-[320px] shrink-0 sticky top-36 z-10 hidden xl:block">
+        <div className="w-full xl:w-[320px] shrink-0 sticky top-45 z-10 hidden xl:block">
           <BoxSummary
             boxType={boxType}
             activeBoxSize={boxSize}

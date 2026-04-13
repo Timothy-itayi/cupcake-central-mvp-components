@@ -7,7 +7,7 @@ import { usePexelsImages } from '../../hooks/usePexelsImages'
 import { useAppShellContext } from '../useAppShellContext'
 
 export const CartLabRoute = () => {
-  const { addProductToCart, openCart, selectors, state } = useAppShellContext()
+  const { openCart, selectors, state, incrementCartLine, decrementCartLine, removeCartLine } = useAppShellContext()
   const { imageMap, isLoading } = usePexelsImages(starterCartProducts)
   const cartQuantityByProductId = useMemo(
     () =>
@@ -26,10 +26,14 @@ export const CartLabRoute = () => {
       recommendedUpsell={selectors.recommendedUpsell}
       imageMap={imageMap}
       isImageLoading={isLoading}
-      onAddProduct={addProductToCart}
+      onAddProduct={() => {}}
       onOpenCart={openCart}
       products={starterCartProducts}
       subtotalCents={selectors.cartSubtotal}
+      cartLines={state.cartLines}
+      onIncrementCartLine={incrementCartLine}
+      onDecrementCartLine={decrementCartLine}
+      onRemoveCartLine={removeCartLine}
     />
   )
 }

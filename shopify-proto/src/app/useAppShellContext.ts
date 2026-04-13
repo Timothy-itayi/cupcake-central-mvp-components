@@ -26,6 +26,9 @@ type AppShellContext = {
   decrementBuildABoxItem: (productId: string) => void
   clearBox: () => void
   openCart: () => void
+  incrementCartLine: (lineId: string) => void
+  decrementCartLine: (lineId: string) => void
+  removeCartLine: (lineId: string) => void
 }
 
 export const useAppShellContext = () => useOutletContext<AppShellContext>()

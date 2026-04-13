@@ -42,40 +42,25 @@ export const AppShell = () => {
             decrementBuildABoxItem,
             clearBox,
             openCart,
+            incrementCartLine,
+            decrementCartLine,
+            removeCartLine,
           }}
         />
       </main>
 
       <CartDrawer
-        amountUntilFreeDelivery={selectors.amountUntilFreeDelivery}
-        deliveryThresholdCents={FREE_DELIVERY_THRESHOLD_CENTS}
-        hasFreeDelivery={selectors.hasFreeDelivery}
         isOpen={state.isCartOpen}
         lines={state.cartLines}
-        onAddUpsell={() => {
-          if (recommendedUpsell) {
-            addProductToCart(recommendedUpsell.product, 'upsell')
-          }
-        }}
-        onBuildABox={() => {
-          closeCart()
-          navigate('/build-a-box')
-        }}
+        subtotalCents={selectors.cartSubtotal}
         onClose={closeCart}
-        onContinueShopping={() => {
-          closeCart()
-          navigate('/cart-lab')
-        }}
         onDecrement={decrementCartLine}
         onIncrement={incrementCartLine}
         onRemove={removeCartLine}
-        showUpsell={Boolean(recommendedUpsell)}
-        subtotalCents={selectors.cartSubtotal}
-        upsellDescription={recommendedUpsell?.description ?? ''}
-        upsellImageAlt={recommendedUpsell?.product.name}
-        upsellImageUrl={recommendedUpsell?.product.localImagePath}
-        upsellName={recommendedUpsell?.product.name ?? ''}
-        upsellPriceCents={recommendedUpsell?.product.priceCents ?? 0}
+        onViewCart={() => {
+          closeCart()
+          navigate('/cart-lab')
+        }}
       />
     </div>
   )

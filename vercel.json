@@ -1,8 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "npm ci --prefix shopify-proto",
-  "buildCommand": "npm run build --prefix shopify-proto",
-  "outputDirectory": "shopify-proto/dist",
+  "installCommand": "if [ -f shopify-proto/package-lock.json ]; then npm ci --prefix shopify-proto; else npm ci; fi",
+  "buildCommand": "if [ -f shopify-proto/package.json ]; then npm run build --prefix shopify-proto && rm -rf dist && cp -R shopify-proto/dist dist; else npm run build; fi",
+  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/(.*)",

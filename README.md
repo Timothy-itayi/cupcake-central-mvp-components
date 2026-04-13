@@ -153,6 +153,22 @@ npm run build
 npm run lint
 ```
 
+## Deploying To Vercel
+
+This repository includes a root `vercel.json` so Vercel can build the `shopify-proto` app from the monorepo root without extra dashboard scripting.
+
+Key points:
+
+- no environment variables are required for this prototype
+- SPA routing is handled with a rewrite fallback to `index.html` for direct deep links
+- build output is `shopify-proto/dist`
+
+Recommended settings in Vercel:
+
+- Framework Preset: `Other`
+- Build Command: use repo default from `vercel.json`
+- Output Directory: use repo default from `vercel.json`
+
 ## Current State
 
 The prototype currently demonstrates:

@@ -1,5 +1,4 @@
 import { formatCurrency } from '../../utils/currency'
-import { isLowStockLevel } from '../../utils/inventory'
 import type { BuildABoxSelection } from '../../types/buildABox'
 import type { Product } from '../../types/product'
 
@@ -27,7 +26,6 @@ export const BuildABoxGrid = ({
       {cupcakes.map((cupcake) => {
         const quantity = quantityByProductId[cupcake.id] ?? 0
         const isSoldOut = cupcake.stockLevel === 0
-        const isLowStock = isLowStockLevel(cupcake.stockLevel)
         const hasReachedStockLimit = quantity >= cupcake.stockLevel
         const canIncrement = remainingCount > 0 && !isSoldOut && !hasReachedStockLimit
         
@@ -89,7 +87,7 @@ export const BuildABoxGrid = ({
                   <button 
                     className="w-full border-[1.5px] border-[#d96a97] text-[#d96a97] font-extrabold text-[11px] tracking-widest py-[0.4rem] rounded-[2px] bg-white hover:bg-pink-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={isSoldOut}
-                    onClick={(e) => {
+                    onClick={() => {
                       if (canIncrement) onIncrement(cupcake.id, cupcake.stockLevel)
                     }}
                   >

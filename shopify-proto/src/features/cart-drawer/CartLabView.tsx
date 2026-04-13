@@ -14,8 +14,6 @@ type CartLabViewProps = {
   cartQuantityByProductId: Record<string, number>
   products: Product[]
   cartLines: CartLine[]
-  imageMap: Record<string, { alt: string; src: string }>
-  isImageLoading: boolean
   onAddProduct: (product: Product) => void
   onOpenCart: () => void
   onIncrementCartLine: (lineId: string) => void

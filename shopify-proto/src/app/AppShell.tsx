@@ -1,6 +1,5 @@
 import { Outlet, useNavigate } from 'react-router-dom'
 
-import { FREE_DELIVERY_THRESHOLD_CENTS } from '../features/cart-drawer/cart.helpers'
 import { useAppStore } from '../hooks/useAppStore'
 import { CartDrawer } from '../features/cart-drawer/CartDrawer'
 import { TopNav } from './navigation/TopNav'
@@ -23,7 +22,6 @@ export const AppShell = () => {
     setBuildABoxType,
     setBuildABoxSize,
   } = useAppStore()
-  const recommendedUpsell = selectors.recommendedUpsell
 
   return (
     <div className="flex flex-col min-h-screen bg-[#fffaf5]">

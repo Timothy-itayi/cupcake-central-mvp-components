@@ -3,12 +3,10 @@ import { useMemo } from 'react'
 import { starterCartProducts } from '../../data/products'
 import { FREE_DELIVERY_THRESHOLD_CENTS } from '../../features/cart-drawer/cart.helpers'
 import { CartLabView } from '../../features/cart-drawer/CartLabView'
-import { usePexelsImages } from '../../hooks/usePexelsImages'
 import { useAppShellContext } from '../useAppShellContext'
 
 export const CartLabRoute = () => {
   const { openCart, selectors, state, incrementCartLine, decrementCartLine, removeCartLine } = useAppShellContext()
-  const { imageMap, isLoading } = usePexelsImages(starterCartProducts)
   const cartQuantityByProductId = useMemo(
     () =>
       Object.fromEntries(
@@ -24,8 +22,6 @@ export const CartLabRoute = () => {
       deliveryThresholdCents={FREE_DELIVERY_THRESHOLD_CENTS}
       hasFreeDelivery={selectors.hasFreeDelivery}
       recommendedUpsell={selectors.recommendedUpsell}
-      imageMap={imageMap}
-      isImageLoading={isLoading}
       onAddProduct={() => {}}
       onOpenCart={openCart}
       products={starterCartProducts}

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { formatCurrency } from '../../utils/currency'
 import type { CartUpsellRecommendation } from './cart.helpers'
 import type { Product } from '../../types/product'
@@ -29,8 +30,11 @@ export const CartLabView = ({
   onDecrementCartLine,
   onRemoveCartLine,
 }: CartLabViewProps) => {
+  const [isRibbonAdded, setIsRibbonAdded] = useState(false)
+  const finalTotalCents = subtotalCents + (isRibbonAdded ? 200 : 0)
+
   return (
-    <div className="bg-white max-h-screen overflow-y-auto font-sans text-gray-900 pb-20">
+    <div className="bg-white min-h-screen font-sans text-gray-900 pb-20">
       <div className="max-w-[1200px] mx-auto px-4 lg:px-8 py-12 flex flex-col lg:flex-row gap-16 items-start">
         
         {/* Left Column: Cart Items & Gift Options */}
@@ -113,114 +117,42 @@ export const CartLabView = ({
           </div>
 
           {/* Gift Message with Ribbon Checkbox */}
-          <div className="flex items-center gap-2 mb-8">
-            <input type="checkbox" id="gift-ribbon" className="w-4 h-4 rounded-[2px] border-gray-300 accent-[#d96a97]" />
-            <label htmlFor="gift-ribbon" className="text-sm font-extrabold text-[#d96a97]">
-              Add Gift Message with Ribbon ($2.00)
-            </label>
-          </div>
-
-          <div className="w-full h-px bg-gray-200 mb-8" />
-
-          {/* Gift Card Message textarea */}
-          <div className="mb-8">
-            <label htmlFor="gift-message" className="block text-[15px] font-extrabold text-gray-900 mb-2">
-              Gift Card Message
-            </label>
-            <textarea
-              id="gift-message"
-              rows={4}
-              placeholder="Enter your gift message here..."
-              className="w-full border border-gray-400 rounded-[2px] p-4 text-sm focus:outline-none focus:border-[#d96a97] resize-none"
-            />
-            <div className="text-[11px] font-bold text-gray-500 mt-2">5/120</div>
-            <div className="text-[11px] font-bold text-[#d96a97] mt-1">Note: Emojis and special characters are unavailable</div>
-          </div>
-
-          {/* Delivery Instructions textarea */}
-          <div>
-            <label htmlFor="delivery-instructions" className="block text-[15px] font-extrabold text-gray-900 mb-2">
-              Delivery Instructions
-            </label>
-            <textarea
-              id="delivery-instructions"
-              rows={4}
-              placeholder="No delivery as this is a prototype..."
-              className="w-full border border-gray-400 rounded-[2px] p-4 text-sm focus:outline-none focus:border-[#d96a97] resize-none placeholder-gray-500"
-            />
-            <div className="text-[11px] font-bold text-gray-900 mt-2">0/120 Characters.</div>
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-[80px] h-[80px] flex-shrink-0 bg-gray-50 rounded-[4px] overflow-hidden border border-gray-200">
+              <img 
+                src="/gifts/Gift-Box-Ribbon_1.webp" 
+                alt="Gift Ribbon" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <input 
+                type="checkbox" 
+                id="gift-ribbon" 
+                checked={isRibbonAdded}
+                onChange={(e) => setIsRibbonAdded(e.target.checked)}
+                className="w-4 h-4 rounded-[2px] border-gray-300 accent-[#d96a97]" 
+              />
+              <label htmlFor="gift-ribbon" className="text-[15px] font-extrabold text-[#d96a97] cursor-pointer">
+                Add Gift Message with Ribbon ($2.00)
+              </label>
+            </div>
           </div>
         </div>
 
         {/* Right Column: Checkout Summary */}
-        <div className="w-full lg:w-[400px] ">
+        <div className="w-full lg:w-[400px] lg:shrink-0">
           <div className="flex items-center justify-between mb-8">
             <span className="text-xl font-extrabold uppercase tracking-widest text-gray-900">Total</span>
             <span className="text-2xl font-extrabold text-gray-900">
-              {formatCurrency(subtotalCents)}
+              {formatCurrency(finalTotalCents)}
             </span>
           </div>
 
           <div className="flex flex-col gap-6 items-center w-full">
-            <div className="text-sm font-extrabold text-gray-900 text-center w-full">
-              Choose delivery/pickup option:
-            </div>
-            
-            <div className="flex flex-col gap-2 w-full pl-6">
-              <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
-                <input type="radio" name="delivery-method" value="metro" defaultChecked className="w-3.5 h-3.5 accent-[#3b82f6]" />
-                Melbourne Metro
-              </label>
-              <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
-                <input type="radio" name="delivery-method" value="pickup" className="w-3.5 h-3.5 accent-[#3b82f6]" />
-                Store Pickup
-              </label>
-              <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
-                <input type="radio" name="delivery-method" value="rest" className="w-3.5 h-3.5 accent-[#3b82f6]" />
-                Rest Of Australia
-              </label>
-            </div>
-
-            <div className="text-xs font-medium text-gray-900 text-center w-full mt-2">
-              Enter your postal code to check if you are<br/>eligible for local delivery:
-            </div>
-
-            <div className="flex w-full">
-              <input 
-                type="text" 
-                placeholder="Enter your postal code ..." 
-                className="flex-1 border border-gray-200 rounded-l-[2px] px-4 py-3 text-sm focus:outline-none placeholder-gray-400"
-              />
-              <button className="bg-gray-100 border border-l-0 border-gray-200 rounded-r-[2px] px-4 flex items-center justify-center hover:bg-gray-200 transition-colors">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-black">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-              </button>
-            </div>
-
-            <div className="flex items-center justify-between w-full border border-gray-200 p-4 rounded-[2px] mt-2">
-              <span className="text-sm font-medium text-gray-900">Authority to leave in a safe<br/>place <span className="text-red-500">*</span></span>
-              <div className="flex items-center gap-4">
-                <label className="flex flex-col items-center gap-1 cursor-pointer">
-                  <input type="radio" name="authority" value="yes" className="w-3.5 h-3.5 accent-black" />
-                  <span className="text-[10px] font-bold">Yes</span>
-                </label>
-                <label className="flex flex-col items-center gap-1 cursor-pointer">
-                  <input type="radio" name="authority" value="no" className="w-3.5 h-3.5 accent-black" />
-                  <span className="text-[10px] font-bold">No</span>
-                </label>
-              </div>
-            </div>
-
             <button className="w-full bg-[#f468a3] hover:bg-[#e35691] text-white font-extrabold text-[13px] tracking-widest uppercase py-4 rounded-[2px] transition-colors mt-2">
               Checkout
             </button>
-
-            <div className="text-[10px] font-medium text-center text-gray-900 leading-tight">
-              By checking out, I accept the Terms & Conditions<br/>
-              Read our Delivery Guide Here
-            </div>
           </div>
         </div>
 

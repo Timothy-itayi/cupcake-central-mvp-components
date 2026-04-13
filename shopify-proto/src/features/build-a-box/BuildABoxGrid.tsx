@@ -75,19 +75,25 @@ export const BuildABoxGrid = ({
 
             {/* Bottom area: Title + Price + Controls */}
             <div className="flex flex-col items-center justify-between p-4 flex-1">
-              <p className="text-[13px] font-extrabold text-center text-gray-900 mb-3 tracking-wide leading-snug">
-                {cupcake.name}
-              </p>
+              <div className="flex flex-col items-center mb-3">
+                <p className="text-[13px] font-extrabold text-center text-gray-900 tracking-wide leading-snug mb-1">
+                  {cupcake.name}
+                </p>
+                <p className="text-[12px] font-semibold text-gray-500">
+                  {formatCurrency(cupcake.priceCents)}
+                </p>
+              </div>
               
               <div className="mt-auto w-full px-2 pb-2 max-w-[140px]">
                 {quantity === 0 ? (
                   <button 
-                    className="w-full border-[1.5px] border-[#d96a97] text-[#d96a97] font-extrabold text-[11px] tracking-widest py-[0.4rem] rounded-[2px] bg-white hover:bg-pink-50 transition-colors"
+                    className="w-full border-[1.5px] border-[#d96a97] text-[#d96a97] font-extrabold text-[11px] tracking-widest py-[0.4rem] rounded-[2px] bg-white hover:bg-pink-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={isSoldOut}
                     onClick={(e) => {
                       if (canIncrement) onIncrement(cupcake.id, cupcake.stockLevel)
                     }}
                   >
-                    {isSoldOut ? 'SOLD OUT' : formatCurrency(cupcake.priceCents)}
+                    {isSoldOut ? 'SOLD OUT' : 'ADD'}
                   </button>
                 ) : (
                   <div 
